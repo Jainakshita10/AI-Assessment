@@ -1,0 +1,42 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:   # ✅ manual trigger
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      ACR_LOGIN_SERVER: aiasstacr.azurecr.io
+      IMAGE_NAME: ai-assessment
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # ✅ Login to ACR using username + token (password)
+      - name: Docker login to ACR
+        run: |
+          echo "$ACR_PASSWORD" | docker login $ACR_LOGIN_SERVER \
+            --username "$ACR_USERNAME" \
+            --password-stdin
+        env:
+          ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
+          ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}
+
+      # ✅ Build image
+      - name: Build Docker image
+        run: |
+          IMAGE_TAG=$(date +%s)
+          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
+          docker build . -f Dockerfile -t $ACR_LOGIN_SERVER/$IMAGE_NAME:$IMAGE_TAG
+
+      # ✅ Push image
+      - name: Push Docker image
+        run: |
+          docker push $ACR_LOGIN_SERVER/$IMAGE_NAME:$IMAGE_TAG
