@@ -187,9 +187,9 @@ st.markdown(
                 Every journey begins with knowing where you are —
                 this is our first step toward AI excellence
             </div>
-            <a href="home" target="_self">
+            <a href="login" target="_self">
                 <img src="data:image/png;base64,{get_started}"
-                     style="width:700px;height:300px;cursor:pointer;margin-top:-20px;margin-bottom: 0px" />
+                     style="width:700px;height:200px;cursor:pointer;margin-top:-20px;margin-bottom: 0px" />
             </a>
         </div>
     </div>
