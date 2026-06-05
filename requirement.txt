@@ -1,0 +1,7 @@
+streamlit
+python-dotenv
+google-cloud-bigquery
+pandas
+openpyxl
+matplotlib
+plotly
