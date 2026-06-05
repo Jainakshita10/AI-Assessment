@@ -896,7 +896,7 @@ with nav_col:
         
         st.markdown('<div style="display:flex; justify-content:flex-end;">', unsafe_allow_html=True)
         is_last = cur_num >= total_questions
-        button_label = "✅" if is_last else "→"
+        button_label = "submit" if is_last else "→"
         next_clicked = st.button(button_label, key="next_button",type="secondary")
         st.markdown('</div>', unsafe_allow_html=True)
         if next_clicked:

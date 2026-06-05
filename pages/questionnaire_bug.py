@@ -574,6 +574,8 @@ if selected_dim_idx > 0 and st.session_state.current_original_number == 1:
            if entry["dimension"] == chosen_dim_name:
                st.session_state.current_original_number = entry["original_number"]
                break
+   # ✅ Reset selected dimension so it only applies once
+   st.session_state.selected_dimension = 0
 # ── Resolve active question ───────────────────────────────────────────────────
 cur_num = max(1, min(st.session_state.current_original_number, total_questions))
 st.session_state.current_original_number = cur_num
@@ -901,27 +903,27 @@ with nav_col:
             if is_last:
                 answered = len(st.session_state.answers)
 
-                # if answered < total_questions:
-                #     warning_placeholder.markdown(
-                #         f"""
-                #         <div style="
-                #             background-color:#fff3cd;
-                #             color:#664d03;
-                #             padding:4px 12px;
-                #             border-radius:5px;
-                #             border:1px solid #ffecb5;
-                #             width:100%;
-                #             text-align:center;
-                #             font-weight:600;
-                #             margin:5px 0;
-                #         ">
-                #             ⚠️ Please answer all questions before submitting ({answered}/{total_questions} completed)
-                #         </div>
-                #         """,
-                #         unsafe_allow_html=True
-                #     )
-                # else:
-                st.switch_page("pages/score.py")
+                if answered < total_questions:
+                    warning_placeholder.markdown(
+                        f"""
+                        <div style="
+                            background-color:#fff3cd;
+                            color:#664d03;
+                            padding:4px 12px;
+                            border-radius:5px;
+                            border:1px solid #ffecb5;
+                            width:100%;
+                            text-align:center;
+                            font-weight:600;
+                            margin:5px 0;
+                        ">
+                            ⚠️ Please answer all questions before submitting ({answered}/{total_questions} completed)
+                        </div>
+                        """,
+                        unsafe_allow_html=True
+                    )
+                else:
+                    st.switch_page("pages/score.py")
             else:
                 st.session_state.current_original_number = cur_num + 1
                 st.rerun()

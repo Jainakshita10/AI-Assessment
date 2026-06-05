@@ -2,7 +2,7 @@
 
 import pandas as pd
 
-EXCEL_FILE = "Copy of AI App data sample.xlsx"
+EXCEL_FILE = "AI_App_data_sample.xlsx"
 
 def load_questions():
     df = pd.read_excel(EXCEL_FILE, engine="openpyxl")

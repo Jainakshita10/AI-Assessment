@@ -8,15 +8,22 @@ import sqlite3
 load_dotenv()
 ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
 
-DB_NAME = "assessment.db"
+DB_NAME = os.getenv("DB_NAME", "assessment.db")
 
 
 # =========================================================
 # SQLITE CONNECTION
 # =========================================================
-def get_connection():
-    return sqlite3.connect(DB_NAME)
 
+def get_connection():
+    db_path = DB_NAME
+
+    # ✅ Ensure directory exists
+    db_dir = os.path.dirname(db_path)
+    if db_dir and not os.path.exists(db_dir):
+        os.makedirs(db_dir, exist_ok=True)
+
+    return sqlite3.connect(db_path)
 
 # =========================================================
 # ✅ CREATE TABLES
