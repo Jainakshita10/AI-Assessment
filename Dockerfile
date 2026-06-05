@@ -69,7 +69,7 @@ COPY ./database.py ./database.py
 
 # Copy project files & set ownership to non-root user
 # Ensure startup.sh is executable
-RUN chown -R appuser:appuser /app && chmod +x /app/startup.sh
+RUN chown -R appuser:appuser /app
 
 # Switch to non-root user
 USER appuser
