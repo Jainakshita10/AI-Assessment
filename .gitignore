@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+*.pyc
+.pytest_cache/
+.pyre/
+.python-version
+env/
+venv/
+.venv/
+ENV/
+
+# Streamlit
+.streamlit/
+
+# VS Code
+.vscode/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Database files
+*.sqlite3
+*.db
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# IDE files
+*.idea/
+
+# Media / uploads
+media/
+
+# Misc
+*.env
+*.bak
+*.swp
