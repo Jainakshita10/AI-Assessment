@@ -29,14 +29,13 @@ st.markdown("""
     ::-webkit-scrollbar { display: none; }
     body {
         -ms-overflow-style: none;
-        scrollbar-width: none;
+        scrollbar-height: none;
     }
 
 /* .stApp, .stApp * {color: white !important;} */
 
 /* Full Width Content */
 .block-container {
-
     max-width: 100% !important;
     width: 100% !important;
     margin: 0;
@@ -49,481 +48,149 @@ st.markdown("""
     box-shadow: none;
     min-height: 100vh;
 }
-
-    /* Titles */
-    h1, h2, h3 {
-        color: #00c6ff;
-        font-weight: 600;
-        margin-top: 0;
-        margin-bottom: 0.5rem;
-    }
-
-    h2 {
-        font-size: 1.3rem !important;
-    }
-
-    h3 {
-        font-size: 1rem !important;
-    }
-.logo-container {
-   position: fixed;
-   top: 5px;
-   right: 5px;
-   z-index: 999;
-}
-.logo-container img {
-   width: 60px;
-}
-            /* Buttons */
-    .stButton > button {
-        margin-top: 0px;
-        background-color: #0f2f5f;
-        color: white;
-        border-radius: -10px;
-        padding: 0px 0px;
-        border: 1px solid #1f5fa3;
-        transition: 0.3s;
-    }
-
-    .stButton > button:hover {
-        background-color: #0077b6;
-        transform: scale(1.05);
-    }
-    /* Target ONLY the top back button */
-    div[data-testid="stButton"] button[key="back_home_button"] {
-        padding: 0px 0px;
-        height: 10px;
-        width: 10px;
-        font-size: 8px;
-        line-height: 1;
-        border-radius: 50%;
-    }
-
-/* Remove extra spacing around button */
-div[data-testid="stButton"]:has(button[key="back_home_button"]) {
-    margin-bottom: 0px;
-    padding: 0px 0px;
-    height: 10px;
-    width: 10px;
-    font-size: 8px;
-    line-height: 1;
-    border-radius: 50%;
-}
-
-/* Target both buttons using their keys */
-div[data-testid="stButton"] > button[kind="secondary"] {
-    border-radius: 50% !important;
+/* ================= NAV BUTTONS ================= */
+.st-key-navigation_back_btn button {
+   background: transparent !important;
+   border-radius: 50%;
+    border: 2px solid #9ca3af !important;
+    color: white !important;
     width: 50px;
     height: 50px;
-    padding: 0px;
-    font-size: 20px;
+    font-size: 48px !important;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 0 !important;
 }
-
-/* Optional: tighter look */
-button#back_button, button#next_button {
-    border-radius: 50% !important;
+.st-key-navigation_back_btn button p {
+    font-size: 34px !important;
+    margin: 0 !important;
+    line-height: 1 !important;
 }
-
-    /* Cards for options */
-    .option-card {
-        padding: 16px;
-        margin-bottom: 10px;
-        border-radius: 10px;
-        background-color: #0f2f5f;
-        border: 1px solid #1f5fa3;
-        cursor: pointer;
-    }
-
-    .option-selected {
-        background-color: #0077b6 !important;
-        border: 2px solid #00c6ff;
-    }
-
-    /* Top Nav pills */
-    .pill {
-        display: inline-block;
-        padding: 8px 14px;
-        margin-right: 6px;
-        border-radius: 12px;
-        background-color: #0f2f5f;
-    }
-
-    /* Score Table */
-    .custom-table {
-        background-color: #0f2f5f;
-        border-radius: 10px;
-        padding: 10px;
-    }
-
-    /* Radio Options */
-    div[data-testid="stRadio"] label {
-        background: rgba(255,255,255,0.08);
-        padding: 8px 12px;
-        padding-right: 20px;
-        border-radius: 8px;
-        border: 1px solid rgba(255,255,255,0.10);
-        color: white !important;
-        font-size: 13px;
-        font-weight: 600;
-        min-height: 40px;
-        display: flex;
-        align-items: center;
-        transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-        cursor: pointer;
-        margin-bottom: 6px;
-        color: #FFFFFF !important;
-    }
-
-    div[data-testid="stRadio"] label input[type="radio"] {
-        position: absolute;
-        opacity: 0;
-        width: 300%;
-        height: 100%;
-        margin: 0;
-        z-index: 1;
-        cursor: pointer;
-    }
-
-    div[data-testid="stRadio"] label:has(input[type="radio"]:checked),
-    div[data-testid="stRadio"] label input[type="radio"]:checked + div,
-    div[data-testid="stRadio"] label input[type="radio"]:checked ~ div {
-        background: #1b9400;
-        border-color: #1b9400;
-        color: #FFFFFF !important;
-    }
-/* Target each radio option container */
+.st-key-navigation_next_btn button {
+   background: transparent !important;
+   border-radius: 50%;
+    border: 2px solid #9ca3af !important;
+    color: white !important;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 !important;
+}
+.st-key-navigation_next_btn button p {
+    font-size: 34px !important;
+    margin: 0 !important;
+    line-height: 1 !important;
+}
+.st-key-submit_btn button {
+   border-radius: 6px !important;
+    width: auto !important;
+    height: auto !important;
+    padding: 8px 18px !important;
+    background-color: #2f66d0 !important;
+    font-size: 14px !important;
+    font-weight: 600;
+    border: 1px solid #9ca3af !important;
+    float: left
+}
+.st-key-home_btn button {
+   background: transparent !important;
+   border-radius: 50%;
+    border: 2px solid #9ca3af !important;
+    color: white !important;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 !important;
+}
+/* ================= RADIO GROUP ================= */
+div[data-testid="stRadio"] {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+div[data-testid="stRadio"] > div:first-child {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+}
+/* Hide empty wrapper label */
+div[data-testid="stRadio"] > label {
+    display: none !important;
+}
+/* Radiogroup layout */
+div[data-testid="stRadio"] > div[role="radiogroup"] {
+    display: flex !important;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+}
+/* ================= RADIO OPTION ================= */
 div[data-testid="stRadio"] label {
-    padding: 15px 20px;       /* ✅ increases height + inner spacing */
-    border-radius: 12px;      /* rounded corners */
-    width: 100%;              /* full width box */
+    position: relative;
+    width: 100% !important;
+
     display: flex;
     align-items: center;
     gap: 10px;
-    color: #FFFFFF !important;
-}
 
+    padding: 8px 14px !important;
+    min-height: 34px;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    color: #ffffff !important;
+    background: #1a1a2e;
+    border: 1px solid #2e2e4a;
+    border-radius: 8px;
+
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+/* Hover */
+div[data-testid="stRadio"] label:hover {
+    background: #252540;
+    border-color: #4a4a7a;
+}
+/* Selected */
+div[data-testid="stRadio"] label:has(input[type="radio"]:checked) {
+    background: #213a63;
+    border-color: #00c6ff;
+}
+/* Text + icons */
 div[data-testid="stRadio"] label * {
-   color: #FFFFFF !important;
-   fill: #FFFFFF !important;
+    color: #ffffff !important;
+    fill: #ffffff !important;
 }
-/* Increase spacing between options */
-div[data-testid="stRadio"] > div {
-    gap: 12px;
+/* ================= RADIO INPUT ================= */
+div[data-testid="stRadio"] input[type="radio"] {
+    accent-color: #00c6ff !important;
+    transform: scale(0.9);
+    margin-right: 10px;
 }
-
-    .tabs-wrapper-container {
-        width: 400px;
-        max-width: 280px;
-        overflow-x: auto;
-        padding: 6px 0;
-        margin-top: 6px;
-        display: flex;
-        justify-content: flex-start;
-    }
-
-    .tabs-wrapper {
-        display: flex;
-        gap: 6px;
-        min-width: max-content;
-    }
-
-    .question-tab {
-        background-color: #0f2f5f;
-        color: white;
-        padding: 6px 10px;
-        border-radius: 10px;
-        min-width: 42px;
-        width: 42px;
-        height: 38px;
-        line-height: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        font-weight: 600;
-        font-size: 12px;
-        border: 1px solid #1f5fa3;
-        flex: 0 0 auto;
-        white-space: nowrap;
-        transition: transform 0.2s ease, background-color 0.2s ease;
-    }
-
-    .question-tab:hover {
-        background-color: #0077b6;
-        transform: scale(1.03);
-    }
-
-    .active-tab {
-        background-color: #00c6ff !important;
-        color: #071b3a !important;
-        border-color: #ffffff;
-    }
-
-    .tabs-wrapper-container::-webkit-scrollbar {
-        height: 8px;
-    }
-
-    .tabs-wrapper-container::-webkit-scrollbar-track {
-        background: transparent;
-    }
-
-    .tabs-wrapper-container::-webkit-scrollbar-thumb {
-        background: rgba(255,255,255,0.35);
-        border-radius: 4px;
-    }
-
-    .tabs-wrapper-container::-webkit-scrollbar-thumb:hover {
-        background: rgba(255,255,255,0.6);
-    }
-
-.navigation-bar {
-   position: fixed !important;
-   top: 0px !important;
-   left: 20px !important;
-   margin: 0 !important;
-   padding: 0 !important;
-   display: flex;
-   align-items: flex-start !important;
-   z-index: 9999;
-   border-radius: 50px !important;
+/* Remove extra spacing inside */
+div[data-testid="stRadio"] label div,
+div[data-testid="stRadio"] label p {
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 13px;
+}
+/* ================= REMOVE MARK HIGHLIGHT ================= */
+mark,
+div[data-testid="stMarkdownContainer"] mark {
+    background: transparent !important;
+    color: inherit !important;
 }
 </style>
 """, unsafe_allow_html=True)
 # ── Dimension heading (outside box) + compact grey question box ───────────────
-st.markdown("""
-<style>
-/* Full-width grey question container */
-.question-box {
-   background: rgba(242, 242, 242, 1);
-   border-radius: 12px;
-   padding: 12px 32px;
-   margin-top: 6px;
-   margin-bottom: 14px;
-   border: 1px solid rgba(180,180,200,0.5);
-   box-shadow: 0 2px 10px rgba(0,0,0,0.18);
-   width: 100%;
-   box-sizing: border-box;
-}
-.question-box .q-text {
-   font-size: 13.5px;
-   font-weight: 600;
-   color: #0d1b2e !important;
-   line-height: 1.4;
-   margin: 0;
-   white-space: nowrap;
-   overflow: hidden;
-   text-overflow: ellipsis;
-}
-/* Centre and compact the radio options — dark option boxes */
-div[data-testid="stRadio"] > div[role="radiogroup"] {
-   display: flex !important;
-   flex-direction: column !important;
-   align-items: center !important;
-   gap: 6px !important;
-   width: 100% !important;
-}
-div[data-testid="stRadio"] label {
-   width: 100% !important;
-   min-height: 34px !important;
-   padding: 6px 14px !important;
-   font-size: 12px !important;
-   border-radius: 8px !important;
-   justify-content: flex-start !important;
-   margin-bottom: 0 !important;
-   background: #1a1a2e !important;
-   border: 1px solid #2e2e4a !important;
-   color: #FFFFFF !important;
-}
-div[data-testid="stRadio"] label:hover {
-   background: #252540 !important;
-   border-color: #4a4a7a !important;
-}
-/* Hide empty radio label / wrapper */
-div[data-testid="stRadio"] > label {
-   display: none !important;
-   height: 0 !important;
-   margin: 0 !important;
-   padding: 0 !important;
-}
-div[data-testid="stRadio"] {
-   margin-top: 0 !important;
-   padding-top: 0 !important;
-}
-div[data-testid="stRadio"] > div:first-child {
-   background: transparent !important;
-   border: none !important;
-   box-shadow: none !important;
-   padding: 0 !important;
-   margin: 0 !important;
-   width: 100% !important;
-}
-            
-/* Icon-only circular nav buttons */
-button[key="back_button"],
-button[key="next_button"] {
-   width: 24px !important;
-   height: 24px !important;
-   border-radius: 50% !important;
-   padding: 0 !important;
-   font-size: 48px !important;
-   display: flex !important;
-   align-items: center !important;
-   justify-content: center !important;
-   min-width: 0 !important;
-}
-/* Target ONLY the top back button */
-    div[data-testid="stButton"] button[key="back_home_button"] {
-        padding: 0px 0px;
-        height: 10px;
-        width: 10px;
-        font-size: 24px;
-        line-height: 1;
-        border-radius: -10px;
-        weight: 1000 !important;
-    }
-
-    /* Remove extra spacing around button */
-    div[data-testid="stButton"]:has(button[key="back_home_button"]) {
-        padding: 0px 0px;
-        height: 10px;
-        width: 10px;
-        font-size: 28px;
-        line-height: 1;
-        border-radius: -10px;
-        margin-top: 0px;
-        margin-bottom: 0px;
-    }
-/* NAV BUTTON */
-button[kind="secondary"] {
-    background-color: transparent !important;
-    border: 2px solid white !important;
-    border-radius: 50% !important;
-
-    width: 48px !important;
-    height: 48px !important;
-
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-
-    padding: 0 !important;
-}
-/* 🔥 Force inner arrow to scale */
-button[kind="secondary"] * {
-    font-size: 36px !important;
-    line-height: 1 !important;
-}
-/* Hover */
-button[kind="secondary"]:hover {
-    background-color: rgba(255,255,255,0.1) !important;
-}
-
-/* Disabled */
-button[kind="secondary"]:disabled {
-    opacity: 0.3 !important;
-}
-.navigation-bar {
-   position: fixed !important;
-   top: 0px !important;
-   left: 20px !important;
-   margin: 0 !important;
-   padding: 0 !important;
-   display: flex;
-   align-items: flex-start !important;
-   z-index: 9999;
-   border-radius: -10px !important;
-}
-/* --- RADIO GROUP WRAPPER --- */
-div[role="radiogroup"] {
-    gap: 6px;
-}
-
-/* --- EACH OPTION ROW --- */
-div[role="radiogroup"] > label {
-    background-color: #1c1f2e;
-    padding: 8px 12px !important;   /* ✅ smaller container */
-    border-radius: 8px;
-    border: 1px solid #2a3350;
-    margin-bottom: 6px;
-    display: flex;
-    align-items: center;
-}
-
-/* --- REMOVE BIG DEFAULT SPACING --- */
-div[role="radiogroup"] label div {
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
-/* --- TEXT STYLE --- */
-div[role="radiogroup"] label p {
-    font-size: 13px !important;   /* ✅ smaller text */
-    line-height: 1.3;
-    color: #e6e9f2;
-    margin: 0;
-}
-/* --- RADIO BUTTON COLOR (BLUE) --- */
-div[role="radiogroup"] input[type="radio"] {
-    accent-color: #00c6ff !important;
-    transform: scale(0.9);   /* ✅ slightly smaller */
-    margin-right: 10px;
-}
-/* --- SELECTED ROW STYLE --- */
-div[role="radiogroup"] label:has(input[type="radio"]:checked) {
-    background-color: #213a63;
-    border: 1px solid #00c6ff;
-}
-/* --- REMOVE STREAMLIT GREEN HIGHLIGHT --- */
-div[data-testid="stMarkdownContainer"] mark {
-    background: none !important;
-    color: inherit !important;
-}
-/* 🔴 REMOVE the green highlight completely */
-mark {
-    background-color: transparent !important;
-    color: inherit !important;
-}
-
-/* also target Streamlit container just in case */
-div[data-testid="stMarkdownContainer"] mark {
-    background-color: transparent !important;
-    color: inherit !important;
-}
-<style>
-
-/* Compact options */
-div[role="radiogroup"] > label {
-    padding: 8px 12px !important;
-    border-radius: 8px;
-    border: 1px solid #2a3350;
-    margin-bottom: 6px;
-    background-color: #1c1f2e;
-    display: flex;
-    align-items: center;
-}
-
-/* Smaller text */
-div[role="radiogroup"] label p {
-    font-size: 13px !important;
-    margin: 0;
-}
-
-/* Blue radio */
-div[role="radiogroup"] input[type="radio"] {
-    accent-color: #00c6ff !important;
-    transform: scale(0.9);
-}
-
-/* Selected row */
-div[role="radiogroup"] label:has(input[type="radio"]:checked) {
-    background-color: #213a63;
-    border: 1px solid #00c6ff;
-}
-</style>
-""", unsafe_allow_html=True)
 questions_data = load_questions()
 dimensions = get_dimension_list()
 # ── Session-state defaults ────────────────────────────────────────────────────
@@ -561,6 +228,8 @@ if "q" in query_params:
        qnum = int(raw)
    except (ValueError, TypeError):
        qnum = None
+   # ✅ Consume the param immediately so it can't override Next/Back later
+   del st.query_params["q"]
    if qnum is not None and 1 <= qnum <= total_questions:
        if qnum != st.session_state.current_original_number:
            st.session_state.current_original_number = qnum
@@ -583,25 +252,40 @@ active_entry = all_questions[cur_num - 1]
 question     = active_entry["question"]
 dimension    = active_entry["dimension"]
 # ── HEADER ROW ────────────────────────────────────────────────────────────────
-st.markdown(f"""
-        <div style="
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 9999;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 16px;
-        ">
-            <a href="?nav=home" target="_self">
-                <img src="data:image/png;base64,{back_icon_data}" width="30"/>
-            </a>
-            <img src="data:image/png;base64,{logo_image_data}" width="40"/>
-        </div>
-        <div style="height:50px;"></div>
-    """, unsafe_allow_html=True)
+# st.markdown(f"""
+#         <div style="
+#             position: fixed;
+#             top: 0;
+#             left: 0;
+#             width: 100%;
+#             z-index: 9999;
+#             display: flex;
+#             justify-content: space-between;
+#             align-items: center;
+#             padding: 8px 16px;
+#         ">
+#             <a href="?nav=home" target="_self">
+#                 <img src="data:image/png;base64,{back_icon_data}" width="30"/>
+#             </a>
+#             <img src="data:image/png;base64,{logo_image_data}" width="40"/>
+#         </div>
+#         <div style="height:50px;"></div>
+#     """, unsafe_allow_html=True)
+with st.container():
+    col1, col2 = st.columns([2, 10])
+
+    with col1:
+        if st.button("〈", key="home_btn"):
+            st.switch_page("pages/assessment_home.py")  # 👈 update path to your home page   
+    with col2:
+        st.markdown(
+            f"""
+            <div style="display: flex; justify-content: flex-end;">
+                <img src="data:image/png;base64,{logo_image_data}" width="40">
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 #-------------------------------------------------------------------------------------
 c3, c4 = st.columns([3.5, 1.5])
 with c3:
@@ -613,7 +297,7 @@ with c3:
         flex-direction: column;
         align-items: flex-start;
         margin-bottom: 0px;
-        margin-left: 20px;
+        margin-left: 40px;
         padding-top: 0px;
         margin-top: -30px;   /* ✅ pull it UP (key fix) */
     ">
@@ -648,13 +332,17 @@ with c4:
        q_key = (entry["dimension"], entry["question"]["question"])
        if q_key in st.session_state.answers:
            answered_nums.add(entry["original_number"])
-   tabs_html_items = ""
+
+   # Tabs are NATIVE Streamlit buttons (not anchor links). A button click
+   # triggers a soft rerun that PRESERVES st.session_state — unlike an
+   # <a href> link, which does a full page reload and wipes session state
+   # (that was wiping previously answered questions). Each button is keyed,
+   # so Streamlit adds a `st-key-qtab_<n>` class we use to colour each pill.
+   per_tab_css = ""
    for entry in all_questions:
-       onum      = entry["original_number"]
-       is_active = onum == cur_num
+       onum        = entry["original_number"]
+       is_active   = onum == cur_num
        is_answered = onum in answered_nums
-       active_id = 'id="active-question-tab"' if is_active else ""
-       # Priority: active > answered > default
        if is_active:
            bg     = "#00c6ff"
            color  = "#071b3a"
@@ -667,148 +355,128 @@ with c4:
            bg     = "#0f2f5f"
            color  = "#ffffff"
            border = "1px solid #1f5fa3"
-    #    tabs_html_items += (
-    #        f'<div {active_id} title="Question {onum}" '
-    #     #    f'onclick="window.parent.postMessage({{isStreamlitMessage: true, type: \'streamlit:setComponentValue\', value: {onum}}}, \'*\')"'
-    #        f'onclick="window.location.search='?q={onum}'"'
-    #        f'style="background-color:{bg};color:{color};'
-    #        f'padding:6px 10px;border-radius:10px;min-width:42px;width:42px;height:38px;'
-    #        f'line-height:20px;display:inline-flex;align-items:center;justify-content:center;'
-    #        f'text-align:center;font-weight:600;font-size:12px;border:{border};'
-    #        f'flex:0 0 auto;white-space:nowrap;font-family:Segoe UI,sans-serif;cursor:pointer;">'
-    #        f'Q{onum}</div>'
-    #    )
-       tabs_html_items += (
-    f'<div {active_id} title="Question {onum}" '
-    f'onclick="window.location.search=\'?q={onum}\'" '
-    f'style="background-color:{bg};color:{color};'
-    f'padding:6px 10px;border-radius:10px;min-width:42px;width:42px;height:38px;'
-    f'line-height:20px;display:inline-flex;align-items:center;justify-content:center;'
-    f'text-align:center;font-weight:600;font-size:12px;border:{border};'
-    f'flex:0 0 auto;white-space:nowrap;font-family:Segoe UI,sans-serif;cursor:pointer;">'
-    f'Q{onum}</div>'
-)
-   component_html = f"""
-<!DOCTYPE html>
-<html>
-<head>
+       per_tab_css += (
+           f".st-key-qtab_{onum} button {{"
+           f"background-color:{bg} !important;"
+           f"color:{color} !important;"
+           f"border:{border} !important;}}"
+           f".st-key-qtab_{onum} button p {{color:{color} !important;}}"
+       )
+
+   st.markdown(
+       f"""
 <style>
- * {{ margin: 0; padding: 0; box-sizing: border-box; }}
- body {{ background: transparent; overflow: hidden; }}
- /* Outer framed box */
- #tabs-box {{
+/* Outer framed box (keyed container) */
+.st-key-qtabs {{
    background: rgba(15, 47, 95, 0.55);
    border: 1px solid rgba(0, 198, 255, 0.30);
    border-radius: 14px;
    padding: 7px 10px 6px 10px;
    box-shadow: 0 2px 12px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.06);
- }}
- /* Scrollable inner strip */
- #scroll-container {{
-   width: 100%;
+}}
+/* Horizontal scrollable strip of pills */
+.st-key-qtabs div[data-testid="stHorizontalBlock"] {{
+   flex-wrap: nowrap !important;
    overflow-x: scroll;
-   display: flex;
    align-items: center;
+   gap: 6px !important;
    padding-bottom: 7px;
    scrollbar-width: auto;
    scrollbar-color: #00c6ff rgba(0, 80, 160, 0.55);
- }}
- /* Chrome / Safari / Edge scrollbar */
- #scroll-container::-webkit-scrollbar {{ height: 8px; display: block; }}
- #scroll-container::-webkit-scrollbar-track {{
+}}
+.st-key-qtabs div[data-testid="stHorizontalBlock"]::-webkit-scrollbar {{ height: 8px; display: block; }}
+.st-key-qtabs div[data-testid="stHorizontalBlock"]::-webkit-scrollbar-track {{
    background: rgba(0, 80, 160, 0.55);
    border-radius: 8px;
    border: 1px solid rgba(0, 198, 255, 0.20);
- }}
- #scroll-container::-webkit-scrollbar-thumb {{
+}}
+.st-key-qtabs div[data-testid="stHorizontalBlock"]::-webkit-scrollbar-thumb {{
    background: linear-gradient(90deg, #0077b6 0%, #00c6ff 100%);
    border-radius: 8px;
    border: 1px solid rgba(255,255,255,0.25);
    min-width: 28px;
- }}
- #scroll-container::-webkit-scrollbar-thumb:hover {{
+}}
+.st-key-qtabs div[data-testid="stHorizontalBlock"]::-webkit-scrollbar-thumb:hover {{
    background: linear-gradient(90deg, #00c6ff 0%, #ffffff 100%);
- }}
- #tabs-row {{
-   display: flex;
-   gap: 6px;
-   min-width: max-content;
- }}
+}}
+/* Each column holds one pill — keep fixed width, no shrink */
+.st-key-qtabs div[data-testid="stColumn"] {{
+   min-width: 42px !important;
+   width: 42px !important;
+   flex: 0 0 auto !important;
+}}
+.st-key-qtabs div[data-testid="stColumn"] > div {{ width: 42px !important; }}
+/* Pill geometry (shared by all tab buttons) */
+.st-key-qtabs .stButton {{ width: 42px !important; }}
+.st-key-qtabs .stButton button {{
+   min-width: 42px !important;
+   width: 42px !important;
+   height: 38px !important;
+   padding: 6px 10px !important;
+   border-radius: 10px !important;
+   font-weight: 600 !important;
+   font-size: 12px !important;
+   line-height: 20px !important;
+   display: flex !important;
+   align-items: center !important;
+   justify-content: center !important;
+   white-space: nowrap !important;
+   margin: 0 !important;
+   transition: transform 0.2s ease, background-color 0.2s ease !important;
+}}
+/* Force the inner label text size/weight (overrides global button * rules) */
+.st-key-qtabs .stButton button p,
+.st-key-qtabs .stButton button div,
+.st-key-qtabs .stButton button span,
+.st-key-qtabs .stButton button * {{
+   font-size: 12px !important;
+   font-weight: 600 !important;
+   line-height: 20px !important;
+   margin: 0 !important;
+}}
+.st-key-qtabs .stButton button:hover {{ transform: scale(1.03) !important; }}
+{per_tab_css}
 </style>
-</head>
-<body>
-<div id="tabs-box">
-<div id="scroll-container">
-<div id="tabs-row">
-       {tabs_html_items}
-</div>
-</div>
-</div>
+""",
+       unsafe_allow_html=True,
+   )
+
+   tabs_container = st.container(key="qtabs")
+   with tabs_container:
+       cols = st.columns(total_questions, gap="small")
+       for entry, col in zip(all_questions, cols):
+           onum = entry["original_number"]
+           with col:
+               if st.button(f"Q{onum}", key=f"qtab_{onum}"):
+                   st.session_state.current_original_number = onum
+                   st.rerun()
+
+   # Zero-height helper iframe: only scrolls the active tab into view inside
+   # the parent page's scroll container. DOM access to the parent is allowed
+   # (allow-same-origin); navigation now happens via buttons, not the iframe.
+   components.html(
+       f"""
 <script>
-(function() {{
-
-  // ✅ Navigate using query param (most reliable)
-  function navigateTo(qnum) {{
-    try {{
-      var base = window.parent.location.href.split('?')[0];
-      window.parent.location.href = base + '?q=' + qnum;
-    }} catch (e) {{
-      window.location.search = '?q=' + qnum;
-    }}
-  }}
-
-  // ✅ Attach click handlers AFTER DOM loads
-  window.addEventListener("load", function() {{
-
-    var tabs = document.querySelectorAll('#tabs-row div');
-
-    for (var i = 0; i < tabs.length; i++) {{
-
-      tabs[i].addEventListener('click', function() {{
-
-        var q = this.getAttribute('data-q');
-
-        // ✅ Use navigation (NO postMessage complexity)
-        navigateTo(q);
-
-      }});
-    }}
-
-  }});
-
-  // ✅ Scroll active tab into view
   function centerActiveTab() {{
-    var container = document.getElementById('scroll-container');
-    var active    = document.getElementById('active-question-tab');
-    if (!container || !active) return;
-
-    var cw = container.clientWidth;
-    var tw = active.offsetWidth;
-    var al = active.offsetLeft;
-
-    container.scrollLeft = al - (cw / 2) + (tw / 2);
+    try {{
+      var pdoc = window.parent.document;
+      var box = pdoc.querySelector('.st-key-qtabs');
+      if (!box) return;
+      var c = box.querySelector('div[data-testid="stHorizontalBlock"]');
+      var a = box.querySelector('.st-key-qtab_{cur_num}');
+      if (!c || !a) return;
+      var cr = c.getBoundingClientRect();
+      var ar = a.getBoundingClientRect();
+      c.scrollLeft += (ar.left - cr.left) - (c.clientWidth / 2) + (a.offsetWidth / 2);
+    }} catch (e) {{}}
   }}
-
   centerActiveTab();
   setTimeout(centerActiveTab, 100);
   setTimeout(centerActiveTab, 300);
-
-}})();
 </script>
-</body>
-</html>
-"""
-   # height: tab pill (38) + scrollbar (8) + box padding (13) + buffer (9)
-   clicked_q=components.html(component_html, height=74 , scrolling=False)
-   
-if clicked_q:
-    try:
-        qnum = int(clicked_q)
-        if 1 <= qnum <= total_questions:
-            st.session_state.current_original_number = qnum
-            st.rerun()
-    except:
-        pass
+""",
+       height=0,
+   )
 # Full-width grey box — question text only, single line with ellipsis
 #---------old----
 # st.markdown(
@@ -862,7 +530,7 @@ with o2:
         else:
             st.session_state[radio_key] = None  # ✅ no default selection
 
-    
+
     selected_label = st.radio(
         "",
         options=[text for _, text in option_items],
@@ -876,54 +544,92 @@ with o2:
 _, nav_col, _ = st.columns([1.5, 1, 1.5])
 
 with nav_col:
-    warning_placeholder = st.empty()   # ✅ placeholder for full-width warning
+    warning_placeholder = st.empty()
 
-    left_spacer, b_col, mid_spacer, n_col, right_spacer = st.columns([1, 2, 4, 2, 1])
+    # ✅ Special layout for first question
+    if cur_num == 1:
+        left_spacer, center_col, right_spacer = st.columns([1, 2, 1])
 
-    with b_col:
-        #back_clicked = st.button("⬅", key="back_button", disabled=(cur_num == 1))
-        st.markdown('<div style="display:flex; justify-content:flex-start;">', unsafe_allow_html=True)
-        back_clicked = st.button("←", key="back_button",type="secondary", disabled=(cur_num == 1))
-        st.markdown('</div>', unsafe_allow_html=True)
-        if back_clicked:
-            st.session_state.current_original_number = cur_num - 1
-            st.rerun()
+        with center_col:
+            st.markdown('<div style="display:flex; justify-content:center;">', unsafe_allow_html=True)
 
-    with n_col:
-        # is_last = cur_num >= total_questions
-        # button_label = "✅" if is_last else "➡"
-        # next_clicked = st.button(button_label, key="next_button")
-        
-        st.markdown('<div style="display:flex; justify-content:flex-end;">', unsafe_allow_html=True)
-        is_last = cur_num >= total_questions
-        button_label = "submit" if is_last else "→"
-        next_clicked = st.button(button_label, key="next_button",type="secondary")
-        st.markdown('</div>', unsafe_allow_html=True)
-        if next_clicked:
-            if is_last:
-                answered = len(st.session_state.answers)
+            all_answered = len(st.session_state.answers) == total_questions
+            is_last_question = cur_num == total_questions
+            show_submit = all_answered or is_last_question
 
-                if answered < total_questions:
-                    warning_placeholder.markdown(
-                        f"""
-                        <div style="
-                            background-color:#fff3cd;
-                            color:#664d03;
-                            padding:4px 12px;
-                            border-radius:5px;
-                            border:1px solid #ffecb5;
-                            width:100%;
-                            text-align:center;
-                            font-weight:600;
-                            margin:5px 0;
-                        ">
-                            ⚠️ Please answer all questions before submitting ({answered}/{total_questions} completed)
-                        </div>
-                        """,
-                        unsafe_allow_html=True
-                    )
-                else:
-                    st.switch_page("pages/score.py")
+            button_label = "Submit" if show_submit else "→"
+
+            # if button_label == 'Submit':
+            #     next_clicked = st.button(button_label, key="submit_button", type="secondary")
+            
+            if show_submit:
+                next_clicked = st.button("Submit", key="submit_btn")
+
             else:
+                next_clicked = st.button(button_label, key="navigation_next_btn")
+
+            st.markdown('</div>', unsafe_allow_html=True)
+
+    else:
+        # ✅ Normal layout for other questions
+        left_spacer, b_col, mid_spacer, n_col, right_spacer = st.columns([1, 2, 4, 4, 1])
+
+        with b_col:
+            st.markdown('<div style="display:flex; justify-content:flex-start;">', unsafe_allow_html=True)
+            back_clicked = st.button("←", key="navigation_back_btn")
+            st.markdown('</div>', unsafe_allow_html=True)
+
+            if back_clicked:
+                st.session_state.current_original_number = cur_num - 1
+                st.rerun()
+
+        with n_col:
+            st.markdown('<div style="display:flex; justify-content:flex-end;">', unsafe_allow_html=True)
+
+            all_answered = len(st.session_state.answers) == total_questions
+            is_last_question = cur_num == total_questions
+            show_submit = all_answered or is_last_question
+
+            button_label = "Submit" if show_submit else "→"
+
+            # if button_label == 'Submit':
+            #     next_clicked = st.button(button_label, key="submit_button", type="secondary")
+            
+            if show_submit:
+                next_clicked = st.button("Submit", key="submit_btn")
+
+            else:
+                next_clicked = st.button(button_label, key="navigation_next_btn")
+
+            st.markdown('</div>', unsafe_allow_html=True)
+
+    # ✅ Shared click logic (outside layout)
+    if next_clicked:
+        if show_submit:
+            if all_answered:
+                st.switch_page("pages/score.py")
+            else:
+                answered = len(st.session_state.answers)
+                warning_placeholder.markdown(
+                    f"""
+                    <div style="
+                        background-color:#fff3cd;
+                        color:#664d03;
+                        padding:4px 12px;
+                        border-radius:5px;
+                        border:1px solid #ffecb5;
+                        width:100%;
+                        text-align:center;
+                        font-weight:600;
+                        margin:5px 0;
+                    ">
+                        ⚠️ Please answer all the questions
+                        ({answered}/{total_questions} completed)
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+        else:
+            if cur_num < total_questions:
                 st.session_state.current_original_number = cur_num + 1
                 st.rerun()

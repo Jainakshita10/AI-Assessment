@@ -1,134 +1,196 @@
 # questionnaire.py
 import base64
-
 import streamlit as st
 import streamlit.components.v1 as components
 from questions import load_questions, get_dimension_list
-from ui_style import apply_global_style
+#from ui_style import apply_global_style
 
 with open("media/logo.png", "rb") as f:
     logo_image_data = base64.b64encode(f.read()).decode()
+with open("media/back-icon.png", "rb") as f:
+    back_icon_data = base64.b64encode(f.read()).decode()
 
-apply_global_style()
+#apply_global_style()
 
 st.markdown("""
-<style>
+<style> 
+     #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
 
-.logo-container {
-
-    position: fixed !important;
-
-    top: 5px;
-
-    right: 5px;
-
-    z-index: 999;
-
+/* Full App Background */
+.stApp {
+    background: #000031;
+    font-family: 'Segoe UI', sans-serif;
 }
 
-.logo-container img {
+/* Hide scrollbar */
+    ::-webkit-scrollbar { display: none; }
+    body {
+        -ms-overflow-style: none;
+        scrollbar-height: none;
+    }
 
-    width: 35px !important;
+/* .stApp, .stApp * {color: white !important;} */
 
+/* Full Width Content */
+.block-container {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0;
+    padding-top: 0rem;
+    padding-bottom: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    background: #000031;
+    border-radius: -10px;
+    box-shadow: none;
+    min-height: 100vh;
+}
+/* ================= NAV BUTTONS ================= */
+.st-key-navigation_back_btn button {
+   background: transparent !important;
+   border-radius: 50%;
+    border: 2px solid #9ca3af !important;
+    color: white !important;
+    width: 50px;
+    height: 50px;
+    font-size: 48px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 !important;
+}
+.st-key-navigation_back_btn button p {
+    font-size: 34px !important;
+    margin: 0 !important;
+    line-height: 1 !important;
+}
+.st-key-navigation_next_btn button {
+   background: transparent !important;
+   border-radius: 50%;
+    border: 2px solid #9ca3af !important;
+    color: white !important;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 !important;
+}
+.st-key-navigation_next_btn button p {
+    font-size: 34px !important;
+    margin: 0 !important;
+    line-height: 1 !important;
+}
+.st-key-submit_btn button {
+   border-radius: 6px !important;
+    width: auto !important;
     height: auto !important;
-
+    padding: 8px 18px !important;
+    background-color: #2f66d0 !important;
+    font-size: 14px !important;
+    font-weight: 600;
+    border: 1px solid #9ca3af !important;
+    float: left
 }
-</style>
-
-""", unsafe_allow_html=True)
-# ── Dimension heading (outside box) + compact grey question box ───────────────
-st.markdown("""
-<style>
-/* Full-width grey question container */
-.question-box {
-   background: #c8c8d0;
-   border-radius: 12px;
-   padding: 12px 32px;
-   margin-top: 6px;
-   margin-bottom: 14px;
-   border: 1px solid rgba(180,180,200,0.5);
-   box-shadow: 0 2px 10px rgba(0,0,0,0.18);
-   width: 100%;
-   box-sizing: border-box;
+.st-key-home_btn button {
+   background: transparent !important;
+   border-radius: 50%;
+    border: 2px solid #9ca3af !important;
+    color: white !important;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 !important;
 }
-.question-box .q-text {
-   font-size: 13.5px;
-   font-weight: 600;
-   color: #0d1b2e !important;
-   line-height: 1.4;
-   margin: 0;
-   white-space: nowrap;
-   overflow: hidden;
-   text-overflow: ellipsis;
-}
-/* Centre and compact the radio options — dark option boxes */
-div[data-testid="stRadio"] > div[role="radiogroup"] {
-   display: flex !important;
-   flex-direction: column !important;
-   align-items: center !important;
-   gap: 6px !important;
-   width: 100% !important;
-}
-div[data-testid="stRadio"] label {
-   width: 70% !important;
-   min-height: 34px !important;
-   padding: 6px 14px !important;
-   font-size: 12px !important;
-   border-radius: 8px !important;
-   justify-content: flex-start !important;
-   margin-bottom: 0 !important;
-   background: #1a1a2e !important;
-   border: 1px solid #2e2e4a !important;
-   color: #e8e8f0 !important;
-}
-div[data-testid="stRadio"] label:hover {
-   background: #252540 !important;
-   border-color: #4a4a7a !important;
-}
-/* Hide empty radio label / wrapper */
-div[data-testid="stRadio"] > label {
-   display: none !important;
-   height: 0 !important;
-   margin: 0 !important;
-   padding: 0 !important;
-}
+/* ================= RADIO GROUP ================= */
 div[data-testid="stRadio"] {
-   margin-top: 0 !important;
-   padding-top: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 div[data-testid="stRadio"] > div:first-child {
-   background: transparent !important;
-   border: none !important;
-   box-shadow: none !important;
-   padding: 0 !important;
-   margin: 0 !important;
-   width: 100% !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
 }
-/* Icon-only circular nav buttons */
-button[key="back_button"],
-button[key="next_button"] {
-   width: 48px !important;
-   height: 48px !important;
-   border-radius: 50% !important;
-   padding: 0 !important;
-   font-size: 22px !important;
-   display: flex !important;
-   align-items: center !important;
-   justify-content: center !important;
-   min-width: 0 !important;
+/* Hide empty wrapper label */
+div[data-testid="stRadio"] > label {
+    display: none !important;
 }
-.navigation-bar {
-   position: fixed !important;
-   top: 20px !important;
-   left: 20px !important;
-   margin: 0 !important;
-   padding: 0 !important;
-   display: flex;
-   align-items: flex-start !important;
-   z-index: 9999;
+/* Radiogroup layout */
+div[data-testid="stRadio"] > div[role="radiogroup"] {
+    display: flex !important;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+}
+/* ================= RADIO OPTION ================= */
+div[data-testid="stRadio"] label {
+    position: relative;
+    width: 100% !important;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 8px 14px !important;
+    min-height: 34px;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    color: #ffffff !important;
+    background: #1a1a2e;
+    border: 1px solid #2e2e4a;
+    border-radius: 8px;
+
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+/* Hover */
+div[data-testid="stRadio"] label:hover {
+    background: #252540;
+    border-color: #4a4a7a;
+}
+/* Selected */
+div[data-testid="stRadio"] label:has(input[type="radio"]:checked) {
+    background: #213a63;
+    border-color: #00c6ff;
+}
+/* Text + icons */
+div[data-testid="stRadio"] label * {
+    color: #ffffff !important;
+    fill: #ffffff !important;
+}
+/* ================= RADIO INPUT ================= */
+div[data-testid="stRadio"] input[type="radio"] {
+    accent-color: #00c6ff !important;
+    transform: scale(0.9);
+    margin-right: 10px;
+}
+/* Remove extra spacing inside */
+div[data-testid="stRadio"] label div,
+div[data-testid="stRadio"] label p {
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 13px;
+}
+/* ================= REMOVE MARK HIGHLIGHT ================= */
+mark,
+div[data-testid="stMarkdownContainer"] mark {
+    background: transparent !important;
+    color: inherit !important;
 }
 </style>
 """, unsafe_allow_html=True)
+# ── Dimension heading (outside box) + compact grey question box ───────────────
+
 questions_data = load_questions()
 dimensions = get_dimension_list()
 # ── Session-state defaults ────────────────────────────────────────────────────
@@ -141,14 +203,23 @@ if "answers" not in st.session_state:
 # ── Build CANONICAL question list (fixed order, never rotated) ───────────────
 all_questions = []
 counter = 1
-for dim in dimensions:
-   for q in questions_data.get(dim, []):
-       q["original_number"] = counter
-       all_questions.append({"question": q, "dimension": dim, "original_number": counter})
-       counter += 1
+
+for dim, q_list in questions_data.items():
+    for q in q_list:
+        q["original_number"] = counter
+        all_questions.append({
+                "question": q,
+                "dimension": dim,
+                "original_number": counter
+            })
+        counter += 1
 total_questions = len(all_questions)
 # ── Handle ?q= query-param (tab clicks) ──────────────────────────────────────
 query_params = st.query_params
+# Handle back icon click
+if "nav" in query_params: 
+    if query_params["nav"] == "home":  
+        st.switch_page("pages/assessment_home.py")
 if "q" in query_params:
    raw = query_params["q"]
    if isinstance(raw, list):
@@ -170,6 +241,8 @@ if selected_dim_idx > 0 and st.session_state.current_original_number == 1:
            if entry["dimension"] == chosen_dim_name:
                st.session_state.current_original_number = entry["original_number"]
                break
+   # ✅ Reset selected dimension so it only applies once
+   st.session_state.selected_dimension = 0
 # ── Resolve active question ───────────────────────────────────────────────────
 cur_num = max(1, min(st.session_state.current_original_number, total_questions))
 st.session_state.current_original_number = cur_num
@@ -177,27 +250,80 @@ active_entry = all_questions[cur_num - 1]
 question     = active_entry["question"]
 dimension    = active_entry["dimension"]
 # ── HEADER ROW ────────────────────────────────────────────────────────────────
-c1, c2 = st.columns([4, 1])
-with c1:
-   st.markdown("<div class='navigation-bar'>", unsafe_allow_html=True)
-   back_home = st.button("⬅", key="back_home_button")
-   if back_home:
-       st.session_state.selected_dimension = 0
-       st.session_state.current_original_number = 1
-       st.switch_page("pages/assessment_home.py")
-#    st.markdown("</div>", unsafe_allow_html=True)
-   # Dimension as plain heading outside the box
-   st.markdown(f"## {dimension}")
-# ── TAB BAR — rendered via components.html so <script> actually executes ─────
-with c2:
-   st.markdown(
-    f"""
-    <div class="logo-container">
-        <img src="data:image/png;base64,{logo_image_data}">
+# st.markdown(f"""
+#         <div style="
+#             position: fixed;
+#             top: 0;
+#             left: 0;
+#             width: 100%;
+#             z-index: 9999;
+#             display: flex;
+#             justify-content: space-between;
+#             align-items: center;
+#             padding: 8px 16px;
+#         ">
+#             <a href="?nav=home" target="_self">
+#                 <img src="data:image/png;base64,{back_icon_data}" width="30"/>
+#             </a>
+#             <img src="data:image/png;base64,{logo_image_data}" width="40"/>
+#         </div>
+#         <div style="height:50px;"></div>
+#     """, unsafe_allow_html=True)
+with st.container():
+    col1, col2 = st.columns([2, 10])
+
+    with col1:
+        if st.button("⟨", key="home_btn"):
+            st.switch_page("pages/assessment_home.py")  # 👈 update path to your home page   
+    with col2:
+        st.markdown(
+            f"""
+            <div style="display: flex; justify-content: flex-end;">
+                <img src="data:image/png;base64,{logo_image_data}" width="40">
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+#-------------------------------------------------------------------------------------
+c3, c4 = st.columns([3.5, 1.5])
+with c3:
+    sub_dimension = question.get("sub_dimension", "")
+
+    st.markdown(f"""
+    <div style="
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 0px;
+        margin-left: 30px;
+        padding-top: 0px;
+        margin-top: -30px;   /* ✅ pull it UP (key fix) */
+    ">
+        <!-- Dimension (small label) -->
+        <div style="
+            font-size:16px;
+            font-weight:900;
+            color:rgb(18, 171, 219);
+            opacity:1;
+            filter:none;
+            text-transform:uppercase;
+            letter-spacing:0.5px;
+            margin-bottom:6px;
+        ">
+            {dimension}
+        </div>
+        <!-- Sub-dimension (main title) -->
+        <div style="
+            font-size: 25px;
+            font-weight: 800;
+            color: #FFFFFF;
+            line-height: 1.2;
+        ">
+            {sub_dimension}
+        </div>
     </div>
-    """,
-    unsafe_allow_html=True
-    )
+    """, unsafe_allow_html=True)
+with c4:
    # Build set of answered question numbers for green highlighting
    answered_nums = set()
    for entry in all_questions:
@@ -355,7 +481,7 @@ with c2:
 </html>
 """
    # height: tab pill (38) + scrollbar (8) + box padding (13) + buffer (9)
-   clicked_q=components.html(component_html, height=74, scrolling=False)
+   clicked_q=components.html(component_html, height=74 , scrolling=False)
    
 if clicked_q:
     try:
@@ -366,55 +492,158 @@ if clicked_q:
     except:
         pass
 # Full-width grey box — question text only, single line with ellipsis
+#---------old----
+# st.markdown(
+#    f'<div class="question-box"><div class="q-text" title="{question["question"]}">Q{cur_num}.&nbsp;&nbsp;{question["question"]}</div></div>',
+#    unsafe_allow_html=True,
+# )
+#---------new (with more spacing and better styling)----
 st.markdown(
-   f'<div class="question-box"><div class="q-text" title="{question["question"]}">Q{cur_num}.&nbsp;&nbsp;{question["question"]}</div></div>',
-   unsafe_allow_html=True,
+    f"""
+    <div style="
+        background: rgba(242, 242, 242, 0.7);
+        padding: 16px 20px;
+        border-radius: 0px;
+        position: relative;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        font-size: 16px;
+        font-weight: 600;        
+        left: 50%;
+        right: 50%;
+        margin-left: -50vw;
+        margin-right: -50vw
+        width: 100vw;
+        color: RGBA(0, 56, 87, 1);
+    ">
+        <b>Q{cur_num}.</b>&nbsp;&nbsp;{question["question"]}
+    </div>
+    """,
+    unsafe_allow_html=True,
 )
 # ── Options as radio buttons ──────────────────────────────────────────────────
-options      = question["options"]
-option_items = list(reversed(list(options.items())))
-display_options = [text for _, text in option_items]
-question_key   = (dimension, question["question"])
-selected_score = st.session_state.answers.get(question_key, None)
-selected_index = None  # no default pre-selection
-if selected_score is not None:
-   for idx, (score, _) in enumerate(option_items):
-       if score == selected_score:
-           selected_index = idx
-           break
-selected_label = st.radio(
-   "",
-   options=display_options,
-   index=selected_index,
-   key=f"radio_{cur_num}",
-   label_visibility="collapsed",
-)
-if selected_label is not None:
-   selected_score = option_items[[text for _, text in option_items].index(selected_label)][0]
-   st.session_state.answers[question_key] = selected_score
+o1,o2,o3 = st.columns([0.5,10,0.5])
+with o2:
+    options      = question["options"]
+    option_items = list(reversed(list(options.items())))
+    display_options = [text for _, text in option_items]
+    question_key = (dimension, question["question"])
+    radio_key = f"radio_{cur_num}"
+
+    # ✅ Get saved score (if any)
+    saved_score = st.session_state.answers.get(question_key, None)
+
+    # ✅ Build mapping
+    score_to_label = {score: text for score, text in option_items}
+    label_to_score = {text: score for score, text in option_items}
+
+    # ✅ Restore ONLY if not already set (critical fix)
+    if radio_key not in st.session_state:
+        if saved_score is not None:
+            st.session_state[radio_key] = score_to_label[saved_score]
+        else:
+            st.session_state[radio_key] = None  # ✅ no default selection
+
+    
+    selected_label = st.radio(
+        "",
+        options=[text for _, text in option_items],
+        key=radio_key,
+        label_visibility="collapsed",
+    )
+    # ✅ Save answer ONLY when user selects something
+    if selected_label is not None:
+        st.session_state.answers[question_key] = label_to_score[selected_label]
 # ── Bottom navigation — centred icon-only buttons ─────────────────────────────
-_, nav_col, _ = st.columns([2, 1, 2])
+_, nav_col, _ = st.columns([1.5, 1, 1.5])
+
 with nav_col:
-   b_col, n_col = st.columns(2)
-   with b_col:
-       back_clicked = st.button("⬅", key="back_button", disabled=(cur_num == 1))
-       if back_clicked:
-           st.session_state.current_original_number = cur_num - 1
-           st.rerun()
-   with n_col:
-       is_last      = cur_num >= total_questions
-       button_label = "✅" if is_last else "➡"
-       next_clicked = st.button(button_label, key="next_button")
-       if next_clicked:
-           if is_last:
-               answered = len(st.session_state.answers)
-               if answered < total_questions:
-                   st.warning(
-                       f"Please answer all questions before submitting "
-                       f"({answered}/{total_questions} completed)"
-                   )
-               else:
-                   st.switch_page("pages/score.py")
-           else:
-               st.session_state.current_original_number = cur_num + 1
-               st.rerun()
+    warning_placeholder = st.empty()
+
+    # ✅ Special layout for first question
+    if cur_num == 1:
+        left_spacer, center_col, right_spacer = st.columns([1, 2, 1])
+
+        with center_col:
+            st.markdown('<div style="display:flex; justify-content:center;">', unsafe_allow_html=True)
+
+            all_answered = len(st.session_state.answers) == total_questions
+            is_last_question = cur_num == total_questions
+            show_submit = all_answered or is_last_question
+
+            button_label = "Submit" if show_submit else "→"
+
+            # if button_label == 'Submit':
+            #     next_clicked = st.button(button_label, key="submit_button", type="secondary")
+            
+            if show_submit:
+                next_clicked = st.button("Submit", key="submit_btn")
+
+            else:
+                next_clicked = st.button(button_label, key="navigation_next_btn")
+
+            st.markdown('</div>', unsafe_allow_html=True)
+
+    else:
+        # ✅ Normal layout for other questions
+        left_spacer, b_col, mid_spacer, n_col, right_spacer = st.columns([1, 2, 4, 4, 1])
+
+        with b_col:
+            st.markdown('<div style="display:flex; justify-content:flex-start;">', unsafe_allow_html=True)
+            back_clicked = st.button("←", key="navigation_back_btn")
+            st.markdown('</div>', unsafe_allow_html=True)
+
+            if back_clicked:
+                st.session_state.current_original_number = cur_num - 1
+                st.rerun()
+
+        with n_col:
+            st.markdown('<div style="display:flex; justify-content:flex-end;">', unsafe_allow_html=True)
+
+            all_answered = len(st.session_state.answers) == total_questions
+            is_last_question = cur_num == total_questions
+            show_submit = all_answered or is_last_question
+
+            button_label = "Submit" if show_submit else "→"
+
+            # if button_label == 'Submit':
+            #     next_clicked = st.button(button_label, key="submit_button", type="secondary")
+            
+            if show_submit:
+                next_clicked = st.button("Submit", key="submit_btn")
+
+            else:
+                next_clicked = st.button(button_label, key="navigation_next_btn")
+
+            st.markdown('</div>', unsafe_allow_html=True)
+
+    # ✅ Shared click logic (outside layout)
+    if next_clicked:
+        if show_submit:
+            if all_answered:
+                st.switch_page("pages/score.py")
+            else:
+                answered = len(st.session_state.answers)
+                warning_placeholder.markdown(
+                    f"""
+                    <div style="
+                        background-color:#fff3cd;
+                        color:#664d03;
+                        padding:4px 12px;
+                        border-radius:5px;
+                        border:1px solid #ffecb5;
+                        width:100%;
+                        text-align:center;
+                        font-weight:600;
+                        margin:5px 0;
+                    ">
+                        ⚠️ Please answer all the questions
+                        ({answered}/{total_questions} completed)
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+        else:
+            if cur_num < total_questions:
+                st.session_state.current_original_number = cur_num + 1
+                st.rerun()
