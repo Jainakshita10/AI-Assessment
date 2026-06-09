@@ -174,6 +174,64 @@ div[data-testid="column"] {
     flex-direction: column;
     justify-content: flex-start;
 }
+
+/* Main button */
+div.stButton > button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    background: transparent;
+    color: #7dd3fc;
+
+    padding: 10px 20px;
+    padding-right: 60px; /* space for arrow */
+
+    border-radius: 999px;
+    border: 2px solid #38bdf8;
+
+    height: 44px;
+    width: auto;            /* ✅ prevents shrinking */
+    min-width: 150px;       /* ✅ ensures proper size */
+
+    white-space: nowrap;    /* ✅ fixes text wrapping */
+    overflow: hidden;       /* ✅ removes weird inner gap */
+
+    position: relative;
+
+    font-weight: 600;
+    font-size: 14px;
+    margin-left: -20px !important;
+    transition: all 0.3s ease;
+}
+
+/* Arrow circle */
+/* Arrow circle */
+div.stButton > button::after {
+    content: "❯";
+    position: absolute;
+    right: 0px;             /* ✅ fixed alignment */
+
+    width: 40px;
+    height: 40px;
+
+    background: linear-gradient(135deg, #38bdf8, #2563eb);
+    color: white;
+
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 20px;
+    font-weight: bold;
+}
+/* Hover */
+div.stButton > button:hover {
+    border-color: #60a5fa;
+    box-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
+    color: #bae6fd;
+}
 </style>
 """, unsafe_allow_html=True)
 # --------------------- DATA ---------------------
@@ -338,10 +396,12 @@ table_style = """
     border: 2px solid rgba(255,255,255,0.7); /* 🔥 strongest emphasis */
 }
 
-/* Special total maturity cell */
-.total-row td:last-child {
-    background: #8a6f00 !important;
-}
+/* Maturity colors override for total row */
+.total-row .initial { background: #5b3a70 !important; }
+.total-row .emerging { background: #8a6f00 !important; }
+.total-row .defined  { background: #3f6f7a !important; }
+.total-row .scaled   { background: #3a6ea5 !important; }
+.total-row .leading  { background: #5a7f2c !important; }
 
 /* Subtle hover */
 .custom-table tr:hover td {
@@ -526,7 +586,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 # --------------------- RESET ---------------------
-x,y = st.columns([8,1])
+x,y = st.columns([7,1])
 with x:
     st.markdown(
         """
@@ -541,15 +601,16 @@ with y:
     with open("media/re-assess-button.png", "rb") as f:
         re_assess_button = base64.b64encode(f.read()).decode()
 
-    st.markdown(
-        f"""
-        <a href="home" target="_self">
-            <img src="data:image/png;base64,{re_assess_button}" 
-                 style="width:128px;height:64px;cursor:pointer;" />
-        </a>
-        """,
-        unsafe_allow_html=True
-    )
-    # if st.button("RE-ASSESS"):
-    #     st.session_state.clear()
-    #     st.switch_page("pages/assessment_home.py")
+    # st.markdown(
+    #     f"""
+    #     <a href="home" target="_self">
+    #         <img src="data:image/png;base64,{re_assess_button}" 
+    #              style="width:128px;height:64px;cursor:pointer;" />
+    #     </a>
+    #     """,
+    #     unsafe_allow_html=True
+    # )
+    if st.button("RE-ASSESS"):
+        st.session_state.clear()
+        st.session_state.values = 'go for re-assess'
+        st.switch_page("pages/home.py")

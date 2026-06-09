@@ -1,7 +1,15 @@
 import base64
+import os
+from dotenv import load_dotenv
 
 import streamlit as st
 from PIL import Image
+
+load_dotenv()
+
+LOGIN_USERNAME = os.getenv("LOGIN_USERNAME", "AI_Assessment")
+LOGIN_PASSWORD = os.getenv("LOGIN_PASSWORD", "Ai@assessment!2026")
+
 # ------------------------------------------------
 # PAGE CONFIG
 # ------------------------------------------------
@@ -219,7 +227,7 @@ with center:
         login = st.button("Login", use_container_width=True)
 
    if login:
-        if username == "admin" and password == "1234":
+        if username == LOGIN_USERNAME and password == LOGIN_PASSWORD:
 
             st.session_state.logged_in = True
             st.markdown("""

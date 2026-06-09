@@ -93,7 +93,7 @@ header {{visibility: hidden;}}
    margin-top: 3.5rem;
    margin-left: -10px;
    text-align: center;
-   height: 180px;
+   height: 100px;
 }}
 /* Info Text */
 .info-text {{
@@ -153,6 +153,64 @@ div.stButton > button {{
    box-shadow:
        0px 4px 12px rgba(0,0,0,0.25);
 }}
+
+/* Main button */
+div.stButton > button {{
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    background: transparent;
+    color: #7dd3fc;
+
+    padding: 10px 20px;
+    padding-right: 50px; /* space for arrow */
+
+    border-radius: 999px;
+    border: 2px solid #38bdf8;
+
+    height: 55px;
+    width: auto;            /* ✅ prevents shrinking */
+    min-width: 180px;       /* ✅ ensures proper size */
+
+    white-space: nowrap;    /* ✅ fixes text wrapping */
+    overflow: hidden;       /* ✅ removes weird inner gap */
+
+    position: relative;
+
+    font-weight: 600;
+    font-size: 14px;
+
+    transition: all 0.3s ease;
+}}
+
+/* Arrow circle */
+div.stButton > button::after {{
+    content: "❯";
+    position: absolute;
+    right: 0px;             /* ✅ fixed alignment */
+
+    width: 50px;
+    height: 50px;
+
+    background: linear-gradient(135deg, #38bdf8, #2563eb);
+    color: white;
+
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 20px;
+    font-weight: bold;
+}}
+
+/* Hover */
+div.stButton > button:hover {{
+    border-color: #60a5fa;
+    box-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
+    color: #bae6fd;
+}}
 </style>
 """, unsafe_allow_html=True)
 
@@ -187,12 +245,15 @@ st.markdown(
                 Every journey begins with knowing where you are —
                 this is our first step toward AI excellence
             </div>
-            <a href="login" target="_self">
-                <img src="data:image/png;base64,{get_started}"
-                     style="width:700px;height:200px;cursor:pointer;margin-top:-20px;margin-bottom: 0px" />
-            </a>
         </div>
     </div>
     """,
     unsafe_allow_html=True
 )
+_ , center, _ = st.columns([0.7,5,2])
+with center: 
+    if st.button("Get Started"):
+        if st.session_state.values == 'go for re-assess':
+            st.switch_page("pages/assessment_home.py")
+        else:
+            st.switch_page("pages/login.py")
