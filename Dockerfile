@@ -75,4 +75,4 @@ RUN chown -R appuser:appuser /app
 USER appuser
 
 # Run the startup script
-CMD ["streamlit", "run", "app.py", "--server.port", "8000", "--server. Address", "0.0.0.0"]
+CMD ["streamlit", "run", "app.py", "--server.port", "8000", "--server.address", "0.0.0.0"]
