@@ -16,7 +16,6 @@ def get_base64(file):
        with open(file, "rb") as f:
         return base64.b64encode(f.read()).decode()
 Background_image_data = get_base64("media/Redesigned_Home_Bg.png")
-get_started = get_base64("media/cropped_get_started.png")
 # ------------------------------------------------
 # CSS
 # ------------------------------------------------
@@ -213,17 +212,11 @@ div.stButton > button:hover {{
 }}
 </style>
 """, unsafe_allow_html=True)
-
-# ------------------------------------------------
-# USERNAME
-# ------------------------------------------------
-username = "Akshita"
-
 # ------------------------------------------------
 # TOP RIGHT
 # ------------------------------------------------
 st.markdown(
-    f"<div class='welcome-text'>Welcome {username}</div>",
+    f"<div class='welcome-text'>Welcome</div>",
     unsafe_allow_html=True
 )
 # ------------------------------------------------
@@ -253,7 +246,4 @@ st.markdown(
 _ , center, _ = st.columns([0.7,5,2])
 with center: 
     if st.button("Get Started"):
-        if st.session_state.values == 'go for re-assess':
-            st.switch_page("pages/assessment_home.py")
-        else:
             st.switch_page("pages/login.py")

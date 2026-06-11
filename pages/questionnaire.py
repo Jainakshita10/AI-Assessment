@@ -4,14 +4,9 @@ import base64
 import streamlit as st
 import streamlit.components.v1 as components
 from questions import load_questions, get_dimension_list
-#from ui_style import apply_global_style
 
 with open("media/logo.png", "rb") as f:
     logo_image_data = base64.b64encode(f.read()).decode()
-with open("media/back-icon.png", "rb") as f:
-    back_icon_data = base64.b64encode(f.read()).decode()
-
-#apply_global_style()
 
 st.markdown("""
 <style> 
@@ -275,7 +270,7 @@ with st.container():
     col1, col2 = st.columns([2, 10])
 
     with col1:
-        if st.button("〈", key="home_btn"):
+        if st.button("❮", key="home_btn"):
             st.switch_page("pages/assessment_home.py")  # 👈 update path to your home page   
     with col2:
         st.markdown(
@@ -297,7 +292,7 @@ with c3:
         flex-direction: column;
         align-items: flex-start;
         margin-bottom: 0px;
-        margin-left: 40px;
+        margin-left: 50px;
         padding-top: 0px;
         margin-top: -30px;   /* ✅ pull it UP (key fix) */
     ">
