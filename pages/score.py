@@ -597,19 +597,6 @@ with x:
         unsafe_allow_html=True
     )
 with y:
-
-    with open("media/re-assess-button.png", "rb") as f:
-        re_assess_button = base64.b64encode(f.read()).decode()
-
-    # st.markdown(
-    #     f"""
-    #     <a href="home" target="_self">
-    #         <img src="data:image/png;base64,{re_assess_button}" 
-    #              style="width:128px;height:64px;cursor:pointer;" />
-    #     </a>
-    #     """,
-    #     unsafe_allow_html=True
-    # )
     if st.button("RE-ASSESS"):
         st.session_state.clear()
         st.session_state.values = 'go for re-assess'

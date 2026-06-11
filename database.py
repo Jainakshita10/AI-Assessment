@@ -2,6 +2,9 @@ import os
 from dotenv import load_dotenv
 import sqlite3
 
+# ✅ ADD THIS
+import psycopg
+
 # ------------------------------------------------
 # LOAD ENV VARIABLES
 # ------------------------------------------------
@@ -12,18 +15,38 @@ DB_NAME = os.getenv("DB_NAME", "assessment.db")
 
 
 # =========================================================
-# SQLITE CONNECTION
+# ✅ CONNECTION HANDLER (SQLITE + POSTGRES)
 # =========================================================
-
 def get_connection():
-    db_path = DB_NAME
+    if ENVIRONMENT == "production":
+        return psycopg.connect(
+            host=os.getenv("PGHOST"),
+            dbname=os.getenv("PGDATABASE"),
+            user=os.getenv("PGUSER"),
+            password=os.getenv("PGPASSWORD"),
+            port=os.getenv("PGPORT", 5432),
+            sslmode="require"
+        )
 
-    # ✅ Ensure directory exists
+    # ✅ Default: SQLite (dev)
+    db_path = DB_NAME
     db_dir = os.path.dirname(db_path)
     if db_dir and not os.path.exists(db_dir):
         os.makedirs(db_dir, exist_ok=True)
 
     return sqlite3.connect(db_path)
+
+
+# =========================================================
+# ✅ HELPER (QUERY PLACEHOLDERS)
+# =========================================================
+def is_postgres():
+    return ENVIRONMENT == "production"
+
+
+def get_placeholder():
+    return "%s" if is_postgres() else "?"
+
 
 # =========================================================
 # ✅ CREATE TABLES
@@ -32,55 +55,111 @@ def create_tables():
     conn = get_connection()
     cursor = conn.cursor()
 
-    # ✅ TABLE 1: RESPONDENTS
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS respondents (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        client_name TEXT,
-        industry TEXT,
-        domain TEXT,
-        name TEXT,
-        designation TEXT,
-        role TEXT,
-        email TEXT UNIQUE
-    )
-    """)
+    if is_postgres():
+        # ✅ POSTGRES SYNTAX
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS respondents_details (
+            id SERIAL PRIMARY KEY,
+            client_name TEXT,
+            industry TEXT,
+            domain TEXT,
+            name TEXT,
+            designation TEXT,
+            role TEXT,
+            email TEXT UNIQUE,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+        """)
 
-    # ✅ TABLE 2: ASSESSMENT RESULTS
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS assessment_results (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT,
-        email TEXT,
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS assessment_scores (
+            id SERIAL PRIMARY KEY,
+            name TEXT,
+            email TEXT,
 
-        dim1_score INTEGER,
-        dim2_score INTEGER,
-        dim3_score INTEGER,
-        dim4_score INTEGER,
-        dim5_score INTEGER,
-        dim6_score INTEGER,
-        dim7_score INTEGER,
+            dim1_score INTEGER,
+            dim2_score INTEGER,
+            dim3_score INTEGER,
+            dim4_score INTEGER,
+            dim5_score INTEGER,
+            dim6_score INTEGER,
+            dim7_score INTEGER,
 
-        total_score INTEGER,
-        total_percentage REAL,
+            total_score INTEGER,
+            total_percentage REAL,
 
-        dim1_pct REAL,
-        dim2_pct REAL,
-        dim3_pct REAL,
-        dim4_pct REAL,
-        dim5_pct REAL,
-        dim6_pct REAL,
-        dim7_pct REAL,
+            dim1_pct REAL,
+            dim2_pct REAL,
+            dim3_pct REAL,
+            dim4_pct REAL,
+            dim5_pct REAL,
+            dim6_pct REAL,
+            dim7_pct REAL,
 
-        dim1_category TEXT,
-        dim2_category TEXT,
-        dim3_category TEXT,
-        dim4_category TEXT,
-        dim5_category TEXT,
-        dim6_category TEXT,
-        dim7_category TEXT
-    )
-    """)
+            dim1_category TEXT,
+            dim2_category TEXT,
+            dim3_category TEXT,
+            dim4_category TEXT,
+            dim5_category TEXT,
+            dim6_category TEXT,
+            dim7_category TEXT,
+
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+        """)
+
+    else:
+        # ✅ SQLITE (your original code)
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS respondents_details (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            client_name TEXT,
+            industry TEXT,
+            domain TEXT,
+            name TEXT,
+            designation TEXT,
+            role TEXT,
+            email TEXT UNIQUE,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+        """)
+
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS assessment_scores (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT,
+            email TEXT,
+
+            dim1_score INTEGER,
+            dim2_score INTEGER,
+            dim3_score INTEGER,
+            dim4_score INTEGER,
+            dim5_score INTEGER,
+            dim6_score INTEGER,
+            dim7_score INTEGER,
+
+            total_score INTEGER,
+            total_percentage REAL,
+
+            dim1_pct REAL,
+            dim2_pct REAL,
+            dim3_pct REAL,
+            dim4_pct REAL,
+            dim5_pct REAL,
+            dim6_pct REAL,
+            dim7_pct REAL,
+
+            dim1_category TEXT,
+            dim2_category TEXT,
+            dim3_category TEXT,
+            dim4_category TEXT,
+            dim5_category TEXT,
+            dim6_category TEXT,
+            dim7_category TEXT,
+
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+        """)
 
     conn.commit()
     conn.close()
@@ -93,16 +172,60 @@ def insert_respondent(client_name, industry, domain, name, designation, role, em
     conn = get_connection()
     cursor = conn.cursor()
 
-    cursor.execute("""
-    INSERT OR REPLACE INTO respondents
-    (client_name, industry, domain, name, designation, role, email)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
-    """, (client_name, industry, domain, name, designation, role, email))
+    if is_postgres():
+        cursor.execute("""
+        INSERT INTO respondents_details
+        (client_name, industry, domain, name, designation, role, email)
+        VALUES (%s, %s, %s, %s, %s, %s, %s)
+        ON CONFLICT (email)
+        DO UPDATE SET
+            client_name = EXCLUDED.client_name,
+            industry = EXCLUDED.industry,
+            domain = EXCLUDED.domain,
+            name = EXCLUDED.name,
+            designation = EXCLUDED.designation,
+            role = EXCLUDED.role;
+        """, (client_name, industry, domain, name, designation, role, email))
+
+    else:
+        cursor.execute("""
+        INSERT OR REPLACE INTO respondents_details
+        (client_name, industry, domain, name, designation, role, email)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+        """, (client_name, industry, domain, name, designation, role, email))
 
     conn.commit()
     conn.close()
 
 
+# =========================================================
+# ✅ FETCH RESPONDENTS
+# =========================================================
+def get_saved_respondents():
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT client_name, industry, domain, name, designation, role, email
+        FROM respondents_details
+        ORDER BY client_name, name
+    """)
+
+    rows = cursor.fetchall()
+    conn.close()
+
+    return [
+        {
+            "client_name": row[0],
+            "industry": row[1],
+            "domain": row[2],
+            "name": row[3],
+            "designation": row[4],
+            "role": row[5],
+            "email": row[6],
+        }
+        for row in rows
+    ]
 # =========================================================
 # ✅ CATEGORY LOGIC
 # =========================================================
@@ -117,10 +240,8 @@ def get_category(pct):
         return "Scaled"
     else:
         return "Leading"
-
-
 # =========================================================
-# ✅ INSERT ASSESSMENT RESULT
+# ✅ INSERT ASSESSMENT
 # =========================================================
 def insert_assessment(name, email, dim_scores, dim_pct, dim_category, total_score, total_pct):
     conn = get_connection()
@@ -134,16 +255,20 @@ def insert_assessment(name, email, dim_scores, dim_pct, dim_category, total_scor
         except:
             return default
 
-    cursor.execute("""
-    INSERT INTO assessment_results (
+    placeholder = "%s" if is_postgres() else "?"
+
+    query = f"""
+    INSERT INTO assessment_scores (
         name, email,
         dim1_score, dim2_score, dim3_score, dim4_score, dim5_score, dim6_score, dim7_score,
         total_score, total_percentage,
         dim1_pct, dim2_pct, dim3_pct, dim4_pct, dim5_pct, dim6_pct, dim7_pct,
         dim1_category, dim2_category, dim3_category, dim4_category, dim5_category, dim6_category, dim7_category
     )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    """, (
+    VALUES ({",".join([placeholder]*25)})
+    """
+
+    cursor.execute(query, (
         name, email,
 
         safe_get(dim_scores, 0),
