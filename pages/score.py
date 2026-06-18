@@ -408,6 +408,9 @@ table_style = """
     background: #2a2f55;
     transition: 0.2s;
 }
+[data-testid="StyledFullScreenButton"] {
+    display: none;
+}
 </style>
 """
 col1 , col2 = st.columns([2.2, 1.8])
@@ -541,7 +544,10 @@ with col2:
         width=700     # ✅ controlled width
         )
 # ✅ let column control size (important for alignment)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True,config={
+       'displaylogo': False,
+       'modeBarButtonsToRemove': ['toImage', 'zoom2d', 'pan2d', 'select2d', 'lasso2d', 'autoScale2d', 'resetScale2d']
+   })
         st.markdown("</div>", unsafe_allow_html=True)
 # --------------------- SAVE TO DB ---------------------
 # st.subheader("Save your results")
