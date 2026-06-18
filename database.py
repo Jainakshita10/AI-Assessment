@@ -42,12 +42,8 @@ def get_connection():
 # =========================================================
 def is_postgres():
     return ENVIRONMENT == "production"
-
-
 def get_placeholder():
     return "%s" if is_postgres() else "?"
-
-
 # =========================================================
 # ✅ CREATE TABLES
 # =========================================================
@@ -77,37 +73,36 @@ def create_tables():
             name TEXT,
             email TEXT,
 
-            dim1_score INTEGER,
-            dim2_score INTEGER,
-            dim3_score INTEGER,
-            dim4_score INTEGER,
-            dim5_score INTEGER,
-            dim6_score INTEGER,
-            dim7_score INTEGER,
+            Strategy_and_Operating_Model_score INTEGER,
+            Value_Realisation_score INTEGER,
+            Data_Foundation_score INTEGER,
+            People_and_Culture_score INTEGER,
+            Trusted_and_Responsible_AI_score INTEGER,
+            Advanced_Capabilities_score INTEGER,
+            AI_Engineering_score INTEGER,
 
             total_score INTEGER,
             total_percentage REAL,
 
-            dim1_pct REAL,
-            dim2_pct REAL,
-            dim3_pct REAL,
-            dim4_pct REAL,
-            dim5_pct REAL,
-            dim6_pct REAL,
-            dim7_pct REAL,
+            Strategy_and_Operating_Model_pct REAL,
+            Value_Realisation_pct REAL,
+            Data_Foundation_pct REAL,
+            People_and_Culture_pct REAL,
+            Trusted_and_Responsible_AI_pct REAL,
+            Advanced_Capabilities_pct REAL,
+            AI_Engineering_pct REAL,
 
-            dim1_category TEXT,
-            dim2_category TEXT,
-            dim3_category TEXT,
-            dim4_category TEXT,
-            dim5_category TEXT,
-            dim6_category TEXT,
-            dim7_category TEXT,
+            Strategy_and_Operating_Model_category TEXT,
+            Value_Realisation_category TEXT,
+            Data_Foundation_category TEXT,
+            People_and_Culture_category TEXT,
+            Trusted_and_Responsible_AI_category TEXT,
+            Advanced_Capabilities_category TEXT,
+            AI_Engineering_category TEXT,
 
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
         """)
-
     else:
         # ✅ SQLITE (your original code)
         cursor.execute("""
@@ -129,42 +124,35 @@ def create_tables():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT,
             email TEXT,
-
-            dim1_score INTEGER,
-            dim2_score INTEGER,
-            dim3_score INTEGER,
-            dim4_score INTEGER,
-            dim5_score INTEGER,
-            dim6_score INTEGER,
-            dim7_score INTEGER,
-
+            Strategy_and_Operating_Model_score INTEGER,
+            Value_Realisation_score INTEGER,
+            Data_Foundation_score INTEGER,
+            People_and_Culture_score INTEGER,
+            Trusted_and_Responsible_AI_score INTEGER,
+            Advanced_Capabilities_score INTEGER,
+            AI_Engineering_score INTEGER,
             total_score INTEGER,
             total_percentage REAL,
-
-            dim1_pct REAL,
-            dim2_pct REAL,
-            dim3_pct REAL,
-            dim4_pct REAL,
-            dim5_pct REAL,
-            dim6_pct REAL,
-            dim7_pct REAL,
-
-            dim1_category TEXT,
-            dim2_category TEXT,
-            dim3_category TEXT,
-            dim4_category TEXT,
-            dim5_category TEXT,
-            dim6_category TEXT,
-            dim7_category TEXT,
-
+            Strategy_and_Operating_Model_pct REAL,
+            Value_Realisation_pct REAL,
+            Data_Foundation_pct REAL,
+            People_and_Culture_pct REAL,
+            Trusted_and_Responsible_AI_pct REAL,
+            Advanced_Capabilities_pct REAL,
+            AI_Engineering_pct REAL,
+            Strategy_and_Operating_Model_category TEXT,
+            Value_Realisation_category TEXT,
+            Data_Foundation_category TEXT,
+            People_and_Culture_category TEXT,
+            Trusted_and_Responsible_AI_category TEXT,
+            Advanced_Capabilities_category TEXT,
+            AI_Engineering_category TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
         """)
 
     conn.commit()
     conn.close()
-
-
 # =========================================================
 # ✅ INSERT RESPONDENT
 # =========================================================
@@ -260,10 +248,10 @@ def insert_assessment(name, email, dim_scores, dim_pct, dim_category, total_scor
     query = f"""
     INSERT INTO assessment_scores (
         name, email,
-        dim1_score, dim2_score, dim3_score, dim4_score, dim5_score, dim6_score, dim7_score,
+        Strategy_and_Operating_Model_score, Value_Realisation_score, Data_Foundation_score, People_and_Culture_score, Trusted_and_Responsible_AI_score, Advanced_Capabilities_score, AI_Engineering_score,
         total_score, total_percentage,
-        dim1_pct, dim2_pct, dim3_pct, dim4_pct, dim5_pct, dim6_pct, dim7_pct,
-        dim1_category, dim2_category, dim3_category, dim4_category, dim5_category, dim6_category, dim7_category
+        Strategy_and_Operating_Model_pct, Value_Realisation_pct, Data_Foundation_pct, People_and_Culture_pct, Trusted_and_Responsible_AI_pct, Advanced_Capabilities_pct, AI_Engineering_pct,
+        Strategy_and_Operating_Model_category, Value_Realisation_category, Data_Foundation_category, People_and_Culture_category, Trusted_and_Responsible_AI_category, Advanced_Capabilities_category, AI_Engineering_category
     )
     VALUES ({",".join([placeholder]*25)})
     """
