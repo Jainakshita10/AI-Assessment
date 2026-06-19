@@ -49,16 +49,17 @@ st.markdown("""
    border-radius: 50%;
     border: 2px solid #9ca3af !important;
     color: white !important;
-    width: 50px;
-    height: 50px;
-    font-size: 48px !important;
+    width: 35px;
+    height: 35px;
+    font-size: 30px !important;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0 !important;
+    margin-top: -5px !important;
 }
 .st-key-navigation_back_btn button p {
-    font-size: 34px !important;
+    font-size: 30px !important;
     margin: 0 !important;
     line-height: 1 !important;
 }
@@ -67,28 +68,31 @@ st.markdown("""
    border-radius: 50%;
     border: 2px solid #9ca3af !important;
     color: white !important;
-    width: 50px;
-    height: 50px;
+    width: 35px;
+    height: 35px;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0 !important;
+    margin-top: -5px !important;
 }
 .st-key-navigation_next_btn button p {
-    font-size: 34px !important;
+    font-size: 30px !important;
     margin: 0 !important;
     line-height: 1 !important;
 }
 .st-key-submit_btn button {
    border-radius: 6px !important;
-    width: auto !important;
-    height: auto !important;
+    width: 20 !important;
+    height: 20 !important;
     padding: 8px 18px !important;
     background-color: #2f66d0 !important;
     font-size: 14px !important;
     font-weight: 600;
     border: 1px solid #9ca3af !important;
     float: left
+    margin-top: -100px;
+    display: flex;
 }
 .st-key-home_btn button {
    background: transparent !important;
@@ -133,13 +137,13 @@ div[data-testid="stRadio"] label {
 
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 5px;
 
     padding: 8px 14px !important;
-    min-height: 34px;
+    min-height: 28px;
 
     font-size: 12px;
-    font-weight: 600;
+    font-weight: 400;
 
     color: #ffffff !important;
     background: #1a1a2e;
@@ -175,13 +179,34 @@ div[data-testid="stRadio"] label div,
 div[data-testid="stRadio"] label p {
     margin: 0 !important;
     padding: 0 !important;
-    font-size: 13px;
+    font-size: 11px;
 }
 /* ================= REMOVE MARK HIGHLIGHT ================= */
 mark,
 div[data-testid="stMarkdownContainer"] mark {
     background: transparent !important;
     color: inherit !important;
+}
+/* ================= TEXT AREA STYLING ================= */
+.stTextArea textarea {
+    background-color: #1a1a2e !important;
+    color: #ffffff !important;
+    border: 1px solid #2e2e4a !important;
+    border-radius: 8px !important;
+    padding: 12px 14px !important;
+    font-size: 13px !important;
+    font-family: 'Segoe UI', sans-serif !important;
+    transition: all 0.2s ease !important;
+    margin-bottom: -10px;
+    height: 30px;
+}
+.stTextArea textarea:focus {
+    border-color: #00c6ff !important;
+    box-shadow: 0 0 0 2px rgba(0, 198, 255, 0.1) !important;
+    outline: none !important;
+}
+.stTextArea textarea::placeholder {
+    color: #6b7280 !important;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -483,17 +508,17 @@ st.markdown(
     f"""
     <div style="
         background: rgba(242, 242, 242, 0.7);
-        padding: 16px 20px;
+        padding: 8px 10px;
         border-radius: 0px;
         position: relative;
-        margin-top: 10px;
-        margin-bottom: 20px;
+        margin-top: -20px;
+        margin-bottom: 5px;
         font-size: 16px;
         font-weight: 600;        
         left: 50%;
         right: 50%;
         margin-left: -50vw;
-        margin-right: -50vw
+        margin-right: -50vw;
         width: 100vw;
         color: RGBA(0, 56, 87, 1);
     ">
@@ -510,21 +535,27 @@ with o2:
     display_options = [text for _, text in option_items]
     question_key = (dimension, question["question"])
     radio_key = f"radio_{cur_num}"
+    text_key = f"text_{cur_num}"
 
-    # ✅ Get saved score (if any)
-    saved_score = st.session_state.answers.get(question_key, None)
+    # ✅ Get saved answer (if any) - supports both radio and text
+    saved_answer = st.session_state.answers.get(question_key, None)
 
-    # ✅ Build mapping
+    # ✅ Build mapping for radio options
     score_to_label = {score: text for score, text in option_items}
     label_to_score = {text: score for score, text in option_items}
 
     # ✅ Restore ONLY if not already set (critical fix)
     if radio_key not in st.session_state:
-        if saved_score is not None:
-            st.session_state[radio_key] = score_to_label[saved_score]
+        if saved_answer is not None and isinstance(saved_answer, dict) and saved_answer.get("type") == "radio":
+            st.session_state[radio_key] = score_to_label.get(saved_answer.get("value"))
         else:
             st.session_state[radio_key] = None  # ✅ no default selection
-
+    
+    if text_key not in st.session_state:
+        if saved_answer is not None and isinstance(saved_answer, dict) and saved_answer.get("type") == "text":
+            st.session_state[text_key] = saved_answer.get("value", "")
+        else:
+            st.session_state[text_key] = ""
 
     selected_label = st.radio(
         "",
@@ -532,9 +563,57 @@ with o2:
         key=radio_key,
         label_visibility="collapsed",
     )
-    # ✅ Save answer ONLY when user selects something
-    if selected_label is not None:
-        st.session_state.answers[question_key] = label_to_score[selected_label]
+    
+    # # ✅ Radio selection clears text area
+    # if selected_label is not None:
+    #     st.session_state.answers[question_key] = {"type": "radio", "value": label_to_score[selected_label]}
+    #     st.session_state[text_key] = ""  # Clear text input when radio is selected
+    #selected_label = st.radio(...)
+    # ── Text area for custom answer ───────────────────────────────────────────
+    #st.markdown("<div style='margin-top: 0px;'>", unsafe_allow_html=True)
+    st.markdown("<div style='font-size: 13px; color: #9ca3af; margin-top: 5px; margin-bottom: 0px;'><b>Or write your own answer:</b></div>", unsafe_allow_html=True)
+    
+    text_answer = st.text_area(
+        "",
+        value=st.session_state[text_key],
+        key=text_key,
+        height=30,
+        placeholder="Type your response here...",
+        label_visibility="collapsed"
+    )
+    
+    # ✅ Text input clears radio selection
+        
+    # ✅ Move this ABOVE st.radio()
+    # if text_key in st.session_state and st.session_state[text_key].strip():
+    #     st.session_state[radio_key] = None
+
+    # elif not text_answer.strip() and selected_label is None:
+    #     # ✅ If both are empty, remove the answer
+    #     if question_key in st.session_state.answers:
+    #         del st.session_state.answers[question_key]
+    
+    # ✅ Handle answer persistence correctly
+    if text_answer.strip():
+        # Custom text takes priority
+        st.session_state.answers[question_key] = {
+            "type": "text",
+            "value": text_answer.strip()
+        }
+
+    elif selected_label is not None:
+        # Radio answer
+        st.session_state.answers[question_key] = {
+            "type": "radio",
+            "value": label_to_score[selected_label]
+        }
+
+    else:
+        # Neither selected → remove answer
+        if question_key in st.session_state.answers:
+            del st.session_state.answers[question_key]
+    
+    st.markdown("</div>", unsafe_allow_html=True)
 # ── Bottom navigation — centred icon-only buttons ─────────────────────────────
 _, nav_col, _ = st.columns([1.5, 1, 1.5])
 
@@ -546,7 +625,7 @@ with nav_col:
         left_spacer, center_col, right_spacer = st.columns([1, 2, 1])
 
         with center_col:
-            st.markdown('<div style="display:flex; justify-content:center;">', unsafe_allow_html=True)
+            #st.markdown('<div style="display:flex; justify-content:center;">', unsafe_allow_html=True)
 
             all_answered = len(st.session_state.answers) == total_questions
             is_last_question = cur_num == total_questions
@@ -563,23 +642,24 @@ with nav_col:
             else:
                 next_clicked = st.button(button_label, key="navigation_next_btn")
 
-            st.markdown('</div>', unsafe_allow_html=True)
+            #st.markdown('</div>', unsafe_allow_html=True)
 
     else:
         # ✅ Normal layout for other questions
-        left_spacer, b_col, mid_spacer, n_col, right_spacer = st.columns([1, 2, 4, 4, 1])
+        #left_spacer, b_col, mid_spacer, n_col, right_spacer = st.columns([1, 2, 4, 4, 1])
+        left_spacer, b_col, n_col, right_spacer = st.columns([1, 2, 2, 1])
 
         with b_col:
-            st.markdown('<div style="display:flex; justify-content:flex-start;">', unsafe_allow_html=True)
+            #st.markdown('<div style="display:flex; justify-content:flex-start;">', unsafe_allow_html=True)
             back_clicked = st.button("←", key="navigation_back_btn")
-            st.markdown('</div>', unsafe_allow_html=True)
+            #st.markdown('</div>', unsafe_allow_html=True)
 
             if back_clicked:
                 st.session_state.current_original_number = cur_num - 1
                 st.rerun()
 
         with n_col:
-            st.markdown('<div style="display:flex; justify-content:flex-end;">', unsafe_allow_html=True)
+            #st.markdown('<div style="display:flex; justify-content:flex-end;">', unsafe_allow_html=True)
 
             all_answered = len(st.session_state.answers) == total_questions
             is_last_question = cur_num == total_questions
@@ -596,10 +676,36 @@ with nav_col:
             else:
                 next_clicked = st.button(button_label, key="navigation_next_btn")
 
-            st.markdown('</div>', unsafe_allow_html=True)
+            #st.markdown('</div>', unsafe_allow_html=True)
 
     # ✅ Shared click logic (outside layout)
     if next_clicked:
+    
+        # ✅ STEP 5: VALIDATION HERE
+        has_radio = selected_label is not None
+        has_text = text_answer.strip() != ""
+
+        if not (has_radio or has_text):
+            warning_placeholder.markdown(
+                """
+                <div style="
+                    background-color:#fff3cd;
+                    color:#664d03;
+                    padding:4px 12px;
+                    border-radius:5px;
+                    border:1px solid #ffecb5;
+                    width:100%;
+                    text-align:center;
+                    font-weight:600;
+                    margin:5px 0;
+                ">
+                    ⚠️ Please answer this question before continuing
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+    else:
+        # ✅ EXISTING LOGIC continues ONLY if valid
         if show_submit:
             if all_answered:
                 st.switch_page("pages/score.py")
