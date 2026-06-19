@@ -9,6 +9,12 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed"
 )
+
+# ------------------------------------------------
+# SESSION STATE INITIALIZATION
+# ------------------------------------------------
+if "agreement_checked" not in st.session_state:
+    st.session_state.agreement_checked = False
 # ------------------------------------------------
 # IMAGE DATA
 # ------------------------------------------------
@@ -210,6 +216,78 @@ div.stButton > button:hover {{
     box-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
     color: #bae6fd;
 }}
+
+/* T&C and Checkbox Section */
+.tc-section {{
+    margin-top: 30px;
+    margin-left: 10px;
+}}
+
+.tc-text {{
+    color: white;
+    font-size: 0.98rem;
+    font-weight: 600;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    max-width: 380px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}}
+
+/* Custom Checkbox - Large Size */
+div[data-testid="stCheckbox"] {{
+    margin-top: 3px;
+}}
+
+div[data-testid="stCheckbox"] label {{
+    cursor: pointer;
+}}
+
+/* Increase checkbox input size */
+div[data-testid="stCheckbox"] input[type="checkbox"] {{
+    width: 20px !important;
+    height: 20px !important;
+    cursor: pointer;
+    accent-color: #38bdf8;
+}}
+
+.privacy-link {{
+    color: #60a5fa;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 500;
+    border-bottom: 1px solid #38bdf8;
+    transition: all 0.2s ease;
+}}
+
+.privacy-link:hover {{
+    color: #60a5fa;
+    border-bottom: 1px solid #60a5fa;
+}}
+
+/* Button disabled state - visible but grayed/blurred */
+div.stButton > button:disabled {{
+    opacity: 0.6;
+    cursor: not-allowed;
+    filter: blur(0.2px);
+    background: transparent;
+    border-color: #38bdf8 !important;
+    color: #7dd3fc !important;
+}}
+
+div.stButton > button:disabled::after {{
+    opacity: 0.8;
+}}
+
+div.stButton > button:disabled:hover {{
+    border-color: #38bdf8;
+    box-shadow: none;
+    color: #7dd3fc;
+    transform: none;
+    opacity: 0.8;
+}}
 </style>
 """, unsafe_allow_html=True)
 # ------------------------------------------------
@@ -243,7 +321,47 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-_ , center, _ = st.columns([0.7,5,2])
+_ , center, _ = st.columns([0.2,6,2])
 with center: 
-    if st.button("Get Started"):
-            st.switch_page("pages/login.py")
+    # ------------------------------------------------
+    # SESSION STATE FOR CHECKBOX
+    # ------------------------------------------------
+    if "agreement_checked" not in st.session_state:
+        st.session_state.agreement_checked = False
+    
+    # ------------------------------------------------
+    # CHECKBOX WITH PRIVACY NOTICE LINK
+    # ------------------------------------------------
+    col1, col2 = st.columns([0.04, 1])
+    
+    with col1:
+        st.session_state.agreement_checked = st.checkbox(
+            label="",
+            value=st.session_state.agreement_checked,
+            key="agreement_checkbox"
+        )
+    
+    with col2:
+        st.markdown(
+            """
+            <div class='tc-text'>
+                I agree to the collection and processing of my responses 
+                for AI maturity assessment and improvement purposes.
+                <br>
+                <a href='https://www.example.com/privacy' target='_blank' class='privacy-link'>View Privacy Notice ↗</a>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+    
+    # ------------------------------------------------
+    # GET STARTED BUTTON (Always visible, grayed when disabled)
+    # ------------------------------------------------
+    st.markdown("<div style='margin-top: 20px;'></div>", unsafe_allow_html=True)
+    
+    if st.button(
+        "Get Started",
+        disabled=not st.session_state.agreement_checked,
+        use_container_width=False
+    ):
+        st.switch_page("pages/login.py")
