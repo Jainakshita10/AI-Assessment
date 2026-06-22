@@ -355,6 +355,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 _ , center, _ = st.columns([0.2,6,2])
+_ , center, _ = st.columns([0.2,6,2])
 with center: 
     # ------------------------------------------------
     # SESSION STATE FOR CHECKBOX
