@@ -9,6 +9,55 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed"
 )
+
+# ------------------------------------------------
+# SESSION STATE INITIALIZATION
+# ------------------------------------------------
+if "show_popup" not in st.session_state:
+    st.session_state.show_popup = False
+
+if "agreement_checked" not in st.session_state:
+    st.session_state.agreement_checked = False
+
+if "accepted_terms" not in st.session_state:
+    st.session_state.accepted_terms = False
+
+
+@st.dialog("Privacy Notice – AI Maturity Assessment")
+def show_terms_popup():
+    st.write("""
+    ### Purpose
+This assessment collects responses to evaluate the AI maturity of your organization and generate insights and recommendations.
+### Data Collected
+We may collect:
+- Survey responses
+- Organization-related inputs (if provided)
+- Technical metadata (e.g., browser or session information)
+### How Data is Used
+Your data will be used to:
+- Analyze AI maturity levels
+- Generate aggregated insights and reports
+- Improve our assessment capabilities
+### Data Storage
+All data is securely stored using cloud infrastructure (e.g., Azure services).
+### Data Retention
+Data may be retained for analysis purposes and will be securely managed.
+### Data Sharing
+Your responses will not be shared externally.
+### Your Rights
+You may:
+- Withdraw consent at any time
+- Request deletion of your data
+    """)
+    if st.button("Accept",key='accept_btn'):
+        st.session_state.accepted_terms = True
+        st.session_state.show_popup = False
+        st.rerun()
+
+    # if st.button("Close"):
+    #     st.session_state.show_popup = False
+    #     st.rerun()
+
 # ------------------------------------------------
 # IMAGE DATA
 # ------------------------------------------------
@@ -89,7 +138,7 @@ header {{visibility: hidden;}}
    background: rgba(6,25,60,0.82);
    padding: 24px 10px;
    border-radius: -20px;
-   margin-top: 3.5rem;
+   margin-top: 0.5rem;
    margin-left: -10px;
    text-align: center;
    height: 100px;
@@ -110,84 +159,37 @@ header {{visibility: hidden;}}
     padding: 1rem 2rem 1rem 2rem;
     margin: 0;
 }}
-.custom-btn {{
-   margin-top: 28px;
-   width: 230px;
-   height: 58px;
-   border-radius: 40px;
-   border: none;
-   background: linear-gradient(
-       90deg,
-       #2f63ff,
-       #55d6ff
-   );
-   color: white;
-   font-size: 18px;
-   font-weight: 700;
-   cursor: pointer;
-   box-shadow:
-       0px 4px 12px rgba(0,0,0,0.25);
-}}
-.custom-btn:hover {{
-   transform: scale(1.02);
-}}
-div.stButton {{
-   margin-top: 25px;
-   margin-left: 15px;
-}}
-div.stButton > button {{
-   width: 230px;
-   height: 58px;
-   border-radius: 40px;
-   border: none;
-   background: linear-gradient(
-       90deg,
-       #2f63ff,
-       #55d6ff
-   );
-   color: white;
-   font-size: 18px;
-   font-weight: 700;
-   cursor: pointer;
-   box-shadow:
-       0px 4px 12px rgba(0,0,0,0.25);
-}}
-
 /* Main button */
-div.stButton > button {{
+.st-key-get_started_btn button {{
     display: inline-flex;
     align-items: center;
     justify-content: flex-start;
-
-    background: transparent;
-    color: #7dd3fc;
-
-    padding: 10px 20px;
-    padding-right: 50px; /* space for arrow */
-
-    border-radius: 999px;
-    border: 2px solid #38bdf8;
+    background: transparent !important;
+    color: #7dd3fc !important;
+    padding: 10px 20px !important;
+    padding-right: 50px !important;
+    border-radius: 999px !important;
+    border: 2px solid #38bdf8 !important;
 
     height: 55px;
-    width: auto;            /* ✅ prevents shrinking */
-    min-width: 180px;       /* ✅ ensures proper size */
-
-    white-space: nowrap;    /* ✅ fixes text wrapping */
-    overflow: hidden;       /* ✅ removes weird inner gap */
+    width: auto;
+    min-width: 180px;
+    white-space: nowrap;
+    overflow: hidden;
 
     position: relative;
+    margin-top: 5px;
 
     font-weight: 600;
     font-size: 14px;
-
     transition: all 0.3s ease;
 }}
 
-/* Arrow circle */
-div.stButton > button::after {{
+/* Arrow */
+.st-key-get_started_btn button::after {{
     content: "❯";
     position: absolute;
-    right: 0px;             /* ✅ fixed alignment */
+    right: 0px;
 
     width: 50px;
     height: 50px;
@@ -205,10 +207,119 @@ div.stButton > button::after {{
 }}
 
 /* Hover */
-div.stButton > button:hover {{
-    border-color: #60a5fa;
+.st-key-get_started_btn button:hover {{
+    border-color: #60a5fa !important;
     box-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
-    color: #bae6fd;
+    color: #bae6fd !important;
+}}
+/* Target ONLY the privacy link button */
+.st-key-terms_btn button {{
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+    margin-top: 5px !important;
+    color: #60a5fa !important;
+    text-decoration: none;
+    float: left;
+    font-size: 16px;
+    font-weight: 500;
+    align-items: left;
+    cursor: pointer;
+    box-shadow: none !important;
+}}
+
+/* Ensure no arrow */
+.st-key-terms_btn button::after {{
+    content: none !important;
+}}
+
+/* T&C and Checkbox Section */
+.tc-section {{
+    margin-top: 30px;
+    margin-bottom: -20px;
+    margin-left: 10px;
+}}
+
+.tc-text {{
+    color: white;
+    font-size: 0.98rem;
+    font-weight: 600;
+    line-height: 1.5;
+    margin-top: 10px;
+    margin-bottom: -20px;
+    padding-bottom: 10px;
+    max-width: 380px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}}
+
+/* Custom Checkbox - Large Size */
+div[data-testid="stCheckbox"] {{
+    margin-top: 3px;
+}}
+
+div[data-testid="stCheckbox"] label {{
+    cursor: pointer;
+}}
+
+/* Increase checkbox input size */
+div[data-testid="stCheckbox"] input[type="checkbox"] {{
+    width: 20px !important;
+    height: 20px !important;
+    cursor: pointer;
+    accent-color: #38bdf8;
+}}
+
+.privacy-link {{
+    color: #60a5fa;
+    font-size: 18px;
+    font-weight: 500;
+    border-bottom: 1px solid #38bdf8;
+    text-decoration: underline !important;
+    transition: all 0.2s ease;
+}}
+.privacy-link:hover {{
+    color: #60a5fa;
+    text-decoration: underline !important;
+    border-bottom: 1px solid #60a5fa;
+}}
+
+/* Button disabled state - visible but grayed/blurred */
+div.stButton > button:disabled {{
+    opacity: 0.2;
+    cursor: not-allowed;
+    filter: blur(0.2px);
+    background: transparent;
+    border-color: #38bdf8 !important;
+    color: #7dd3fc !important;
+}}
+
+div.stButton > button:disabled::after {{
+    opacity: 0.8;
+}}
+
+div.stButton > button:disabled:hover {{
+    border-color: #38bdf8;
+    box-shadow: none;
+    color: #7dd3fc;
+    transform: none;
+    opacity: 0.8;
+}}
+.st-key-accept_btn button {{
+    background: linear-gradient(135deg, #38bdf8, #2563eb) !important;
+    border: none !important;
+    padding: 0 !important;
+    margin-top: 5px !important;
+    color: white !important;
+    text-decoration: none;
+    width: 70px;
+    float: left;
+    font-size: 16px;
+    font-weight: 500;
+    align-items: left;
+    cursor: pointer;
+    box-shadow: none !important;
 }}
 </style>
 """, unsafe_allow_html=True)
@@ -243,7 +354,57 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-_ , center, _ = st.columns([0.7,5,2])
+_ , center, _ = st.columns([0.2,6,2])
 with center: 
-    if st.button("Get Started"):
+    # ------------------------------------------------
+    # SESSION STATE FOR CHECKBOX
+    # ------------------------------------------------
+    if "agreement_checked" not in st.session_state:
+        st.session_state.agreement_checked = False
+    if "show_popup" not in st.session_state:
+        st.session_state.show_popup = False
+    # ------------------------------------------------
+    # CHECKBOX WITH PRIVACY NOTICE LINK
+    # ------------------------------------------------
+    col1, col2 = st.columns([0.04, 1])
+    
+    with col1:
+        st.session_state.agreement_checked = st.checkbox(
+            label="",
+            value=st.session_state.agreement_checked,
+            key="agreement_checkbox",
+            disabled=not st.session_state.accepted_terms
+        )
+    
+    with col2:
+        st.markdown(
+            """
+            <div class='tc-text'>
+                I agree to the collection and processing of my responses 
+                for AI maturity assessment and improvement purposes.
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+        link_clicked = st.button("View Privacy Notice", key="terms_btn")
+        if link_clicked:
+            st.session_state.show_popup = True
+
+# ------------------------------------------------
+# TRIGGER POPUP
+# ------------------------------------------------
+if st.session_state.show_popup:
+    show_terms_popup()
+
+# ------------------------------------------------
+# GET STARTED BUTTON (Always visible, grayed when disabled)
+# ------------------------------------------------
+_,center,_ = st.columns([0.7,2,4])
+with center:
+    if st.button(
+            "Get Started",
+            key="get_started_btn",
+            disabled=not st.session_state.agreement_checked,
+            use_container_width=False
+        ):
             st.switch_page("pages/login.py")
