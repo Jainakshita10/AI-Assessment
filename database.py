@@ -1,6 +1,8 @@
 import os
 from dotenv import load_dotenv
 import sqlite3
+import json
+from psycopg.types.json import Json
 
 # ✅ ADD THIS
 import psycopg
@@ -99,6 +101,8 @@ def create_tables():
             Trusted_and_Responsible_AI_category TEXT,
             Advanced_Capabilities_category TEXT,
             AI_Engineering_category TEXT,
+                       
+            Users_Response JSONB,
 
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
@@ -147,6 +151,7 @@ def create_tables():
             Trusted_and_Responsible_AI_category TEXT,
             Advanced_Capabilities_category TEXT,
             AI_Engineering_category TEXT,
+            Users_Response TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
         """)
@@ -231,7 +236,7 @@ def get_category(pct):
 # =========================================================
 # ✅ INSERT ASSESSMENT
 # =========================================================
-def insert_assessment(name, email, dim_scores, dim_pct, dim_category, total_score, total_pct):
+def insert_assessment(name, email, dim_scores, dim_pct, dim_category, total_score, total_pct, Users_Response):
     conn = get_connection()
     cursor = conn.cursor()
 
@@ -244,6 +249,93 @@ def insert_assessment(name, email, dim_scores, dim_pct, dim_category, total_scor
             return default
 
     placeholder = "%s" if is_postgres() else "?"
+    print("-----------user response entered------------------")
+    print(Users_Response)
+    print("-----------user response closed------------------")
+    if is_postgres():
+        Users_Response = Json(Users_Response)   # ✅ Proper JSONB handling
+    else:
+        Users_Response = json.dumps(Users_Response)  # ✅ SQLite (TEXT)
+
+    # query = f"""
+    # INSERT INTO assessment_scores (
+    #     name, email,
+    #     Strategy_and_Operating_Model_score, Value_Realisation_score, Data_Foundation_score, People_and_Culture_score, Trusted_and_Responsible_AI_score, Advanced_Capabilities_score, AI_Engineering_score,
+    #     total_score, total_percentage,
+    #     Strategy_and_Operating_Model_pct, Value_Realisation_pct, Data_Foundation_pct, People_and_Culture_pct, Trusted_and_Responsible_AI_pct, Advanced_Capabilities_pct, AI_Engineering_pct,
+    #     Strategy_and_Operating_Model_category, Value_Realisation_category, Data_Foundation_category, People_and_Culture_category, Trusted_and_Responsible_AI_category, Advanced_Capabilities_category, AI_Engineering_category,
+    #     Users_Response
+    # )
+    # VALUES ({",".join([placeholder]*26)})
+    # """
+
+    # cursor.execute(query, (
+    #     name, email,
+
+    #     safe_get(dim_scores, 0),
+    #     safe_get(dim_scores, 1),
+    #     safe_get(dim_scores, 2),
+    #     safe_get(dim_scores, 3),
+    #     safe_get(dim_scores, 4),
+    #     safe_get(dim_scores, 5),
+    #     safe_get(dim_scores, 6),
+
+    #     total_score,
+    #     total_pct,
+
+    #     safe_get(dim_pct, 0),
+    #     safe_get(dim_pct, 1),
+    #     safe_get(dim_pct, 2),
+    #     safe_get(dim_pct, 3),
+    #     safe_get(dim_pct, 4),
+    #     safe_get(dim_pct, 5),
+    #     safe_get(dim_pct, 6),
+
+    #     safe_get(dim_category, 0, ""),
+    #     safe_get(dim_category, 1, ""),
+    #     safe_get(dim_category, 2, ""),
+    #     safe_get(dim_category, 3, ""),
+    #     safe_get(dim_category, 4, ""),
+    #     safe_get(dim_category, 5, ""),
+    #     safe_get(dim_category, 6, ""),
+
+    #     Users_Response
+    # ))
+
+    values = (
+    name, email,
+
+    safe_get(dim_scores, 0),
+    safe_get(dim_scores, 1),
+    safe_get(dim_scores, 2),
+    safe_get(dim_scores, 3),
+    safe_get(dim_scores, 4),
+    safe_get(dim_scores, 5),
+    safe_get(dim_scores, 6),
+
+    total_score,
+    total_pct,
+
+    safe_get(dim_pct, 0),
+    safe_get(dim_pct, 1),
+    safe_get(dim_pct, 2),
+    safe_get(dim_pct, 3),
+    safe_get(dim_pct, 4),
+    safe_get(dim_pct, 5),
+    safe_get(dim_pct, 6),
+
+    safe_get(dim_category, 0, ""),
+    safe_get(dim_category, 1, ""),
+    safe_get(dim_category, 2, ""),
+    safe_get(dim_category, 3, ""),
+    safe_get(dim_category, 4, ""),
+    safe_get(dim_category, 5, ""),
+    safe_get(dim_category, 6, ""),
+
+    Users_Response
+    )
+
+    placeholders = ",".join(["%s"] * len(values))  # ✅ always correct
 
     query = f"""
     INSERT INTO assessment_scores (
@@ -251,41 +343,11 @@ def insert_assessment(name, email, dim_scores, dim_pct, dim_category, total_scor
         Strategy_and_Operating_Model_score, Value_Realisation_score, Data_Foundation_score, People_and_Culture_score, Trusted_and_Responsible_AI_score, Advanced_Capabilities_score, AI_Engineering_score,
         total_score, total_percentage,
         Strategy_and_Operating_Model_pct, Value_Realisation_pct, Data_Foundation_pct, People_and_Culture_pct, Trusted_and_Responsible_AI_pct, Advanced_Capabilities_pct, AI_Engineering_pct,
-        Strategy_and_Operating_Model_category, Value_Realisation_category, Data_Foundation_category, People_and_Culture_category, Trusted_and_Responsible_AI_category, Advanced_Capabilities_category, AI_Engineering_category
+        Strategy_and_Operating_Model_category, Value_Realisation_category, Data_Foundation_category, People_and_Culture_category, Trusted_and_Responsible_AI_category, Advanced_Capabilities_category, AI_Engineering_category,
+        Users_Response
     )
-    VALUES ({",".join([placeholder]*25)})
+    VALUES ({placeholders})
     """
-
-    cursor.execute(query, (
-        name, email,
-
-        safe_get(dim_scores, 0),
-        safe_get(dim_scores, 1),
-        safe_get(dim_scores, 2),
-        safe_get(dim_scores, 3),
-        safe_get(dim_scores, 4),
-        safe_get(dim_scores, 5),
-        safe_get(dim_scores, 6),
-
-        total_score,
-        total_pct,
-
-        safe_get(dim_pct, 0),
-        safe_get(dim_pct, 1),
-        safe_get(dim_pct, 2),
-        safe_get(dim_pct, 3),
-        safe_get(dim_pct, 4),
-        safe_get(dim_pct, 5),
-        safe_get(dim_pct, 6),
-
-        safe_get(dim_category, 0, ""),
-        safe_get(dim_category, 1, ""),
-        safe_get(dim_category, 2, ""),
-        safe_get(dim_category, 3, ""),
-        safe_get(dim_category, 4, ""),
-        safe_get(dim_category, 5, ""),
-        safe_get(dim_category, 6, "")
-    ))
-
+    cursor.execute(query, values)
     conn.commit()
     conn.close()

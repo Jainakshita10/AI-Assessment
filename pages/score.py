@@ -250,16 +250,29 @@ total_max = 0
 dim_scores = {}
 dim_pct = {}
 dim_category = {}
-
+Users_Response={}
 for dim in dimensions:
     qs = questions_data[dim]
     max_score = len(qs) * 5
 
     # ⚠️ FIX: using correct key format from questionnaire
+    
     obtained = sum(
-        score for (d, _), score in answers.items() if d == dim
+        v["value"] if isinstance(v, dict) and v.get("type") == "radio" else 0
+        for (d, _), v in answers.items()
+        if d == dim
     )
-
+    
+    # ✅ NEW: capture text responses
+    Users_Response[dim] = [
+        {
+            "question": q,
+            "response": v.get("value")
+        }
+        for (d, q), v in answers.items()
+        if d == dim and isinstance(v, dict) and v.get("type") == "text"
+    ]
+    print(Users_Response)
     pct = (obtained / max_score) * 100 if max_score else 0
     category = get_category(pct)
 
@@ -550,27 +563,6 @@ with col2:
    })
         st.markdown("</div>", unsafe_allow_html=True)
 # --------------------- SAVE TO DB ---------------------
-# st.subheader("Save your results")
-
-# if st.button("Save Results"):
-
-#     name = st.session_state.get("name")
-#     email = st.session_state.get("email")
-
-#     if not name or not email:
-#         st.error("User information missing. Please restart assessment.")
-#     else:
-#         insert_assessment(
-#             name,
-#             email,
-#             dim_scores,
-#             dim_pct,
-#             dim_category,
-#             total_score,
-#             total_pct
-#         )
-
-#         st.success("✅ Results saved successfully!")
 name = st.session_state.get("name")
 email = st.session_state.get("email")
 insert_assessment(
@@ -580,7 +572,8 @@ insert_assessment(
             dim_pct,
             dim_category,
             total_score,
-            total_pct
+            total_pct,
+            Users_Response
         )
 # --------------------- FOOTER ---------------------
 st.markdown(

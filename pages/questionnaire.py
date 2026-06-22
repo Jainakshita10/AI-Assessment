@@ -681,31 +681,31 @@ with nav_col:
     # ✅ Shared click logic (outside layout)
     if next_clicked:
     
-        # ✅ STEP 5: VALIDATION HERE
-        has_radio = selected_label is not None
-        has_text = text_answer.strip() != ""
+    #     # ✅ STEP 5: VALIDATION HERE
+    #     has_radio = selected_label is not None
+    #     has_text = text_answer.strip() != ""
 
-        if not (has_radio or has_text):
-            warning_placeholder.markdown(
-                """
-                <div style="
-                    background-color:#fff3cd;
-                    color:#664d03;
-                    padding:4px 12px;
-                    border-radius:5px;
-                    border:1px solid #ffecb5;
-                    width:100%;
-                    text-align:center;
-                    font-weight:600;
-                    margin:5px 0;
-                ">
-                    ⚠️ Please answer this question before continuing
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
-    else:
-        # ✅ EXISTING LOGIC continues ONLY if valid
+    #     if not (has_radio or has_text):
+    #         warning_placeholder.markdown(
+    #             """
+    #             <div style="
+    #                 background-color:#fff3cd;
+    #                 color:#664d03;
+    #                 padding:4px 12px;
+    #                 border-radius:5px;
+    #                 border:1px solid #ffecb5;
+    #                 width:100%;
+    #                 text-align:center;
+    #                 font-weight:600;
+    #                 margin:5px 0;
+    #             ">
+    #                 ⚠️ Please answer this question before continuing
+    #             </div>
+    #             """,
+    #             unsafe_allow_html=True
+    #         )
+    # else:
+    #     # ✅ EXISTING LOGIC continues ONLY if valid
         if show_submit:
             if all_answered:
                 st.switch_page("pages/score.py")
