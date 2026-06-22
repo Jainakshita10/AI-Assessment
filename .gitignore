@@ -184,3 +184,9 @@ Thumbs.db
 
 # Streamlit specific
 .streamlit/
+
+# Custom sensitive or unwanted files
+database_alter.py
+assessment.db-shm
+assessment.db-wal
+assessment.db
