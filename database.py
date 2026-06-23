@@ -75,25 +75,41 @@ def create_tables():
             name TEXT,
             email TEXT,
 
+            Strategy_and_Operating_Model_Response_Score JSONB,
+            Strategy_and_Operating_Model_Response_Text JSONB,
             Strategy_and_Operating_Model_score INTEGER,
-            Value_Realisation_score INTEGER,
-            Data_Foundation_score INTEGER,
-            People_and_Culture_score INTEGER,
-            Trusted_and_Responsible_AI_score INTEGER,
-            Advanced_Capabilities_score INTEGER,
-            AI_Engineering_score INTEGER,
-
-            total_score INTEGER,
-            total_percentage REAL,
-
             Strategy_and_Operating_Model_pct REAL,
+                   
+            Value_Realisation_Response_Score JSONB,
+            Value_Realisation_Response_Text JSONB,
+            Value_Realisation_score INTEGER,
             Value_Realisation_pct REAL,
+                   
+            Data_Foundation_Response_Score JSONB,
+            Data_Foundation_Response_Text JSONB,
+            Data_Foundation_score INTEGER,
             Data_Foundation_pct REAL,
+                   
+            People_and_Culture_Response_Score JSONB,
+            People_and_Culture_Response_Text JSONB,
+            People_and_Culture_score INTEGER,
             People_and_Culture_pct REAL,
+                   
+            Trusted_and_Responsible_AI_Response_Score JSONB,
+            Trusted_and_Responsible_AI_Response_Text JSONB,
+            Trusted_and_Responsible_AI_score INTEGER,
             Trusted_and_Responsible_AI_pct REAL,
-            Advanced_Capabilities_pct REAL,
-            AI_Engineering_pct REAL,
 
+            Advanced_Capabilities_Response_Score JSONB,
+            Advanced_Capabilities_Response_Text JSONB,
+            Advanced_Capabilities_score INTEGER,
+            Advanced_Capabilities_pct REAL,
+
+            AI_Engineering_Response_Score JSONB,
+            AI_Engineering_Response_Text JSONB,
+            AI_Engineering_score INTEGER,
+            AI_Engineering_pct REAL,
+            
             Strategy_and_Operating_Model_category TEXT,
             Value_Realisation_category TEXT,
             Data_Foundation_category TEXT,
@@ -101,8 +117,9 @@ def create_tables():
             Trusted_and_Responsible_AI_category TEXT,
             Advanced_Capabilities_category TEXT,
             AI_Engineering_category TEXT,
-                       
-            Users_Response JSONB,
+                   
+            total_score INTEGER,
+            total_percentage REAL,
 
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
@@ -236,7 +253,7 @@ def get_category(pct):
 # =========================================================
 # ✅ INSERT ASSESSMENT
 # =========================================================
-def insert_assessment(name, email, dim_scores, dim_pct, dim_category, total_score, total_pct, Users_Response):
+def insert_assessment(name, email, dim_scores, dim_pct, dim_category, total_score, total_pct, Users_Response_text,Users_Response_Score):
     conn = get_connection()
     cursor = conn.cursor()
 
@@ -247,104 +264,151 @@ def insert_assessment(name, email, dim_scores, dim_pct, dim_category, total_scor
             return d.get(dims[i], default)
         except:
             return default
+    
+    def extract_dim_json(data, dim_name):
+        val = data.get(dim_name, [])
+        return val if val else None  # ✅ NULL if empty
+    
+    #------------------------json for each dimention-----------------------------
+    # TEXT responses
+    Strategy_and_Operating_Model_Response_Text = extract_dim_json(Users_Response_text, "Strategy and Operating Model")
+    Value_Realisation_Response_Text = extract_dim_json(Users_Response_text, "Value Realisation")
+    Data_Foundation_Response_Text = extract_dim_json(Users_Response_text, "Data Foundation")
+    People_and_Culture_Response_Text = extract_dim_json(Users_Response_text, "People and Culture")
+    Trusted_and_Responsible_AI_Response_Text = extract_dim_json(Users_Response_text, "Trusted and Responsible AI")
+    Advanced_Capabilities_Response_Text = extract_dim_json(Users_Response_text, "Advanced Capabilities")
+    AI_Engineering_Response_Text = extract_dim_json(Users_Response_text, "AI Engineering")
 
-    placeholder = "%s" if is_postgres() else "?"
-    print("-----------user response entered------------------")
-    print(Users_Response)
-    print("-----------user response closed------------------")
+    # SCORE responses
+    Strategy_and_Operating_Model_Response_Score = extract_dim_json(Users_Response_Score, "Strategy and Operating Model")
+    Value_Realisation_Response_Score = extract_dim_json(Users_Response_Score, "Value Realisation")
+    Data_Foundation_Response_Score = extract_dim_json(Users_Response_Score, "Data Foundation")
+    People_and_Culture_Response_Score = extract_dim_json(Users_Response_Score, "People and Culture")
+    Trusted_and_Responsible_AI_Response_Score = extract_dim_json(Users_Response_Score, "Trusted and Responsible AI")
+    Advanced_Capabilities_Response_Score = extract_dim_json(Users_Response_Score, "Advanced Capabilities")
+    AI_Engineering_Response_Score = extract_dim_json(Users_Response_Score, "AI Engineering")
+
     if is_postgres():
-        Users_Response = Json(Users_Response)   # ✅ Proper JSONB handling
-    else:
-        Users_Response = json.dumps(Users_Response)  # ✅ SQLite (TEXT)
+        Strategy_and_Operating_Model_Response_Text = Json(Strategy_and_Operating_Model_Response_Text)
+        Value_Realisation_Response_Text = Json(Value_Realisation_Response_Text)
+        Data_Foundation_Response_Text = Json(Data_Foundation_Response_Text)
+        People_and_Culture_Response_Text = Json(People_and_Culture_Response_Text)
+        Trusted_and_Responsible_AI_Response_Text = Json(Trusted_and_Responsible_AI_Response_Text)
+        Advanced_Capabilities_Response_Text = Json(Advanced_Capabilities_Response_Text)
+        AI_Engineering_Response_Text = Json(AI_Engineering_Response_Text)
 
-    # query = f"""
-    # INSERT INTO assessment_scores (
-    #     name, email,
-    #     Strategy_and_Operating_Model_score, Value_Realisation_score, Data_Foundation_score, People_and_Culture_score, Trusted_and_Responsible_AI_score, Advanced_Capabilities_score, AI_Engineering_score,
-    #     total_score, total_percentage,
-    #     Strategy_and_Operating_Model_pct, Value_Realisation_pct, Data_Foundation_pct, People_and_Culture_pct, Trusted_and_Responsible_AI_pct, Advanced_Capabilities_pct, AI_Engineering_pct,
-    #     Strategy_and_Operating_Model_category, Value_Realisation_category, Data_Foundation_category, People_and_Culture_category, Trusted_and_Responsible_AI_category, Advanced_Capabilities_category, AI_Engineering_category,
-    #     Users_Response
-    # )
-    # VALUES ({",".join([placeholder]*26)})
-    # """
-
-    # cursor.execute(query, (
-    #     name, email,
-
-    #     safe_get(dim_scores, 0),
-    #     safe_get(dim_scores, 1),
-    #     safe_get(dim_scores, 2),
-    #     safe_get(dim_scores, 3),
-    #     safe_get(dim_scores, 4),
-    #     safe_get(dim_scores, 5),
-    #     safe_get(dim_scores, 6),
-
-    #     total_score,
-    #     total_pct,
-
-    #     safe_get(dim_pct, 0),
-    #     safe_get(dim_pct, 1),
-    #     safe_get(dim_pct, 2),
-    #     safe_get(dim_pct, 3),
-    #     safe_get(dim_pct, 4),
-    #     safe_get(dim_pct, 5),
-    #     safe_get(dim_pct, 6),
-
-    #     safe_get(dim_category, 0, ""),
-    #     safe_get(dim_category, 1, ""),
-    #     safe_get(dim_category, 2, ""),
-    #     safe_get(dim_category, 3, ""),
-    #     safe_get(dim_category, 4, ""),
-    #     safe_get(dim_category, 5, ""),
-    #     safe_get(dim_category, 6, ""),
-
-    #     Users_Response
-    # ))
+        Strategy_and_Operating_Model_Response_Score = Json(Strategy_and_Operating_Model_Response_Score)
+        Value_Realisation_Response_Score = Json(Value_Realisation_Response_Score)
+        Data_Foundation_Response_Score = Json(Data_Foundation_Response_Score)
+        People_and_Culture_Response_Score = Json(People_and_Culture_Response_Score)
+        Trusted_and_Responsible_AI_Response_Score = Json(Trusted_and_Responsible_AI_Response_Score)
+        Advanced_Capabilities_Response_Score = Json(Advanced_Capabilities_Response_Score)
+        AI_Engineering_Response_Score = Json(AI_Engineering_Response_Score)
 
     values = (
-    name, email,
+        name, 
+        email,
 
-    safe_get(dim_scores, 0),
-    safe_get(dim_scores, 1),
-    safe_get(dim_scores, 2),
-    safe_get(dim_scores, 3),
-    safe_get(dim_scores, 4),
-    safe_get(dim_scores, 5),
-    safe_get(dim_scores, 6),
+        Strategy_and_Operating_Model_Response_Score,
+        Strategy_and_Operating_Model_Response_Text,
 
-    total_score,
-    total_pct,
+        Value_Realisation_Response_Score,
+        Value_Realisation_Response_Text,
 
-    safe_get(dim_pct, 0),
-    safe_get(dim_pct, 1),
-    safe_get(dim_pct, 2),
-    safe_get(dim_pct, 3),
-    safe_get(dim_pct, 4),
-    safe_get(dim_pct, 5),
-    safe_get(dim_pct, 6),
+        Data_Foundation_Response_Score,
+        Data_Foundation_Response_Text,
 
-    safe_get(dim_category, 0, ""),
-    safe_get(dim_category, 1, ""),
-    safe_get(dim_category, 2, ""),
-    safe_get(dim_category, 3, ""),
-    safe_get(dim_category, 4, ""),
-    safe_get(dim_category, 5, ""),
-    safe_get(dim_category, 6, ""),
+        People_and_Culture_Response_Score,
+        People_and_Culture_Response_Text,
 
-    Users_Response
+        Trusted_and_Responsible_AI_Response_Score,
+        Trusted_and_Responsible_AI_Response_Text,
+
+        Advanced_Capabilities_Response_Score,
+        Advanced_Capabilities_Response_Text,
+
+        AI_Engineering_Response_Score,
+        AI_Engineering_Response_Text,
+
+        safe_get(dim_scores, 0),
+        safe_get(dim_scores, 1),
+        safe_get(dim_scores, 2),
+        safe_get(dim_scores, 3),
+        safe_get(dim_scores, 4),
+        safe_get(dim_scores, 5),
+        safe_get(dim_scores, 6),
+
+        total_score,
+        total_pct,
+
+        safe_get(dim_pct, 0),
+        safe_get(dim_pct, 1),
+        safe_get(dim_pct, 2),
+        safe_get(dim_pct, 3),
+        safe_get(dim_pct, 4),
+        safe_get(dim_pct, 5),
+        safe_get(dim_pct, 6),
+
+        safe_get(dim_category, 0, ""),
+        safe_get(dim_category, 1, ""),
+        safe_get(dim_category, 2, ""),
+        safe_get(dim_category, 3, ""),
+        safe_get(dim_category, 4, ""),
+        safe_get(dim_category, 5, ""),
+        safe_get(dim_category, 6, "")
     )
-
     placeholders = ",".join(["%s"] * len(values))  # ✅ always correct
-
     query = f"""
     INSERT INTO assessment_scores (
-        name, email,
-        Strategy_and_Operating_Model_score, Value_Realisation_score, Data_Foundation_score, People_and_Culture_score, Trusted_and_Responsible_AI_score, Advanced_Capabilities_score, AI_Engineering_score,
-        total_score, total_percentage,
-        Strategy_and_Operating_Model_pct, Value_Realisation_pct, Data_Foundation_pct, People_and_Culture_pct, Trusted_and_Responsible_AI_pct, Advanced_Capabilities_pct, AI_Engineering_pct,
-        Strategy_and_Operating_Model_category, Value_Realisation_category, Data_Foundation_category, People_and_Culture_category, Trusted_and_Responsible_AI_category, Advanced_Capabilities_category, AI_Engineering_category,
-        Users_Response
+        name, 
+        email,
+        Strategy_and_Operating_Model_Response_Score,
+        Strategy_and_Operating_Model_Response_Text,
+
+        Value_Realisation_Response_Score,
+        Value_Realisation_Response_Text,
+
+        Data_Foundation_Response_Score,
+        Data_Foundation_Response_Text,
+
+        People_and_Culture_Response_Score,
+        People_and_Culture_Response_Text,
+
+        Trusted_and_Responsible_AI_Response_Score,
+        Trusted_and_Responsible_AI_Response_Text,
+
+        Advanced_Capabilities_Response_Score,
+        Advanced_Capabilities_Response_Text,
+
+        AI_Engineering_Response_Score,
+        AI_Engineering_Response_Text,
+
+        Strategy_and_Operating_Model_score,
+        Value_Realisation_score,
+        Data_Foundation_score,
+        People_and_Culture_score,
+        Trusted_and_Responsible_AI_score,
+        Advanced_Capabilities_score,
+        AI_Engineering_score,
+
+        total_score,
+        total_percentage,
+
+        Strategy_and_Operating_Model_pct,
+        Value_Realisation_pct,
+        Data_Foundation_pct,
+        People_and_Culture_pct,
+        Trusted_and_Responsible_AI_pct,
+        Advanced_Capabilities_pct,
+        AI_Engineering_pct,
+
+        Strategy_and_Operating_Model_category,
+        Value_Realisation_category,
+        Data_Foundation_category,
+        People_and_Culture_category,
+        Trusted_and_Responsible_AI_category,
+        Advanced_Capabilities_category,
+        AI_Engineering_category
     )
     VALUES ({placeholders})
     """

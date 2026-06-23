@@ -7,6 +7,7 @@ import streamlit.components.v1 as components
 from questions import load_questions, get_dimension_list
 # ✅ NEW: DB import
 from database import insert_assessment, get_category
+from database_views import create_views
 import numpy as np
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
@@ -250,7 +251,8 @@ total_max = 0
 dim_scores = {}
 dim_pct = {}
 dim_category = {}
-Users_Response={}
+Users_Response_Comments={}
+Users_Response_Scores={}
 for dim in dimensions:
     qs = questions_data[dim]
     max_score = len(qs) * 5
@@ -264,7 +266,7 @@ for dim in dimensions:
     )
     
     # ✅ NEW: capture text responses
-    Users_Response[dim] = [
+    Users_Response_Comments[dim] = [
         {
             "question": q,
             "response": v.get("value")
@@ -272,7 +274,15 @@ for dim in dimensions:
         for (d, q), v in answers.items()
         if d == dim and isinstance(v, dict) and v.get("type") == "text"
     ]
-    print(Users_Response)
+    Users_Response_Scores[dim] = [
+        {
+            "question": q,
+            "response": v.get("value")
+        }
+        for (d,q), v in answers.items()
+        if d == dim and isinstance(v, dict) and v.get("type") == "radio"
+    ]
+    print(Users_Response_Comments)
     pct = (obtained / max_score) * 100 if max_score else 0
     category = get_category(pct)
 
@@ -565,6 +575,9 @@ with col2:
 # --------------------- SAVE TO DB ---------------------
 name = st.session_state.get("name")
 email = st.session_state.get("email")
+print("===============================================")
+print(Users_Response_Scores)
+print("===============================================")
 insert_assessment(
             name,
             email,
@@ -573,8 +586,10 @@ insert_assessment(
             dim_category,
             total_score,
             total_pct,
-            Users_Response
+            Users_Response_Comments,
+            Users_Response_Scores
         )
+create_views()
 # --------------------- FOOTER ---------------------
 st.markdown(
     """
