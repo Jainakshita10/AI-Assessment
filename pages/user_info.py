@@ -185,7 +185,7 @@ with a2:
 left, center, right = st.columns([0.8,2,1.2])
 
 with center:
-    create_tables()
+    #create_tables()
     saved_respondents = get_saved_respondents()
     field_names = ["client_name", "industry", "domain", "name", "designation", "role", "email"]
     saved_values_by_field = {
