@@ -545,15 +545,16 @@ with o2:
     label_to_score = {text: score for score, text in option_items}
 
     # ✅ Restore ONLY if not already set (critical fix)
-    if radio_key not in st.session_state:
-        if saved_answer is not None and isinstance(saved_answer, dict) and saved_answer.get("type") == "radio":
-            st.session_state[radio_key] = score_to_label.get(saved_answer.get("value"))
-        else:
-            st.session_state[radio_key] = None  # ✅ no default selection
     
+    if radio_key not in st.session_state:
+        if saved_answer and "radio" in saved_answer:
+            st.session_state[radio_key] = score_to_label.get(saved_answer["radio"])
+        else:
+            st.session_state[radio_key] = None
+
     if text_key not in st.session_state:
-        if saved_answer is not None and isinstance(saved_answer, dict) and saved_answer.get("type") == "text":
-            st.session_state[text_key] = saved_answer.get("value", "")
+        if saved_answer and "text" in saved_answer:
+            st.session_state[text_key] = saved_answer["text"]
         else:
             st.session_state[text_key] = ""
 
@@ -594,24 +595,26 @@ with o2:
     #         del st.session_state.answers[question_key]
     
     # ✅ Handle answer persistence correctly
+    
+    # ✅ Store BOTH independently
+    if question_key not in st.session_state.answers:
+        st.session_state.answers[question_key] = {}
+
+    # Save radio (if selected)
+    if selected_label is not None:
+        st.session_state.answers[question_key]["radio"] = label_to_score[selected_label]
+
+    # Save text (if present)
     if text_answer.strip():
-        # Custom text takes priority
-        st.session_state.answers[question_key] = {
-            "type": "text",
-            "value": text_answer.strip()
-        }
+        st.session_state.answers[question_key]["text"] = text_answer.strip()
 
-    elif selected_label is not None:
-        # Radio answer
-        st.session_state.answers[question_key] = {
-            "type": "radio",
-            "value": label_to_score[selected_label]
-        }
+    # Cleanup if both empty
+    if (
+        ("radio" not in st.session_state.answers[question_key] or selected_label is None)
+        and ("text" not in st.session_state.answers[question_key] or not text_answer.strip())
+    ):
+        st.session_state.answers.pop(question_key, None)
 
-    else:
-        # Neither selected → remove answer
-        if question_key in st.session_state.answers:
-            del st.session_state.answers[question_key]
     
     st.markdown("</div>", unsafe_allow_html=True)
 # ── Bottom navigation — centred icon-only buttons ─────────────────────────────

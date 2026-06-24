@@ -255,30 +255,39 @@ Users_Response_Comments={}
 Users_Response_Scores={}
 for dim in dimensions:
     qs = questions_data[dim]
-    max_score = len(qs) * 5
+    # max score
+    
+    answered_count = sum(
+        1
+        for (d, _), v in answers.items()
+        if d == dim and isinstance(v, dict) and "radio" in v
+    )
+
+    max_score = answered_count * 5
     # ⚠️ FIX: using correct key format from questionnaire
     obtained = sum(
-        v["value"] if isinstance(v, dict) and v.get("type") == "radio" else 0
+        v.get("radio", 0)
         for (d, _), v in answers.items()
-        if d == dim
+        if d == dim and isinstance(v, dict)
     )
-    
     # ✅ NEW: capture text responses
+    
     Users_Response_Comments[dim] = [
         {
             "question": q,
-            "response": v.get("value")
+            "response": v.get("text")
         }
         for (d, q), v in answers.items()
-        if d == dim and isinstance(v, dict) and v.get("type") == "text"
+        if d == dim and isinstance(v, dict) and "text" in v
     ]
+    
     Users_Response_Scores[dim] = [
         {
             "question": q,
-            "response": v.get("value")
+            "response": v.get("radio")
         }
         for (d,q), v in answers.items()
-        if d == dim and isinstance(v, dict) and v.get("type") == "radio"
+        if d == dim and isinstance(v, dict) and "radio" in v
     ]
     print(Users_Response_Comments)
     pct = round((obtained / max_score) * 100, 1) if max_score else 0
