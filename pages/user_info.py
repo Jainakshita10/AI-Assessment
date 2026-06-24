@@ -31,12 +31,12 @@ def is_valid_email(email):
     return re.match(pattern, email)
 
 
-def sync_saved_values(saved_map):
-    selected = st.session_state.get("user_info_client_name", "")
-    if selected in saved_map:
-        selected_data = saved_map[selected]
-        for field in ["industry", "domain", "name", "designation", "role", "email"]:
-            st.session_state[f"user_info_{field}"] = selected_data[field]
+# def sync_saved_values(saved_map):
+#     selected = st.session_state.get("user_info_client_name", "")
+#     if selected in saved_map:
+#         selected_data = saved_map[selected]
+#         for field in ["industry", "domain", "name", "designation", "role", "email"]:
+#             st.session_state[f"user_info_{field}"] = selected_data[field]
 
 # ------------------------------------------------
 # CSS
@@ -211,7 +211,7 @@ with center:
             "",
             placeholder="Enter Client Name",
             label_visibility="collapsed",
-            key="user_info_client_name",
+            #key="user_info_client_name",
             #on_change=sync_saved_values,
             #args=(saved_map,),
         )
@@ -227,7 +227,7 @@ with center:
             "",
             placeholder="Enter Industry",
             label_visibility="collapsed",
-            key="user_info_industry",
+            #key="user_info_industry",
         )
 
     col5, col6 = st.columns([0.5, 1.5])
@@ -241,7 +241,7 @@ with center:
             "",
             placeholder="Enter Domain",
             label_visibility="collapsed",
-            key="user_info_domain",
+            #key="user_info_domain",
         )
 
     col7, col8 = st.columns([0.5, 1.5])
@@ -255,7 +255,7 @@ with center:
             "",
             placeholder="Enter Name",
             label_visibility="collapsed",
-            key="user_info_name",
+            #key="user_info_name",
         )
 
     col9, col10 = st.columns([0.5, 1.5])
@@ -269,7 +269,7 @@ with center:
             "",
             placeholder="Enter Designation",
             label_visibility="collapsed",
-            key="user_info_designation",
+            #key="user_info_designation",
         )
 
     col11, col12 = st.columns([0.5, 1.5])
@@ -283,7 +283,7 @@ with center:
             "",
             placeholder="Enter Role",
             label_visibility="collapsed",
-            key="user_info_role",
+            #key="user_info_role",
         )
 
     col13, col14 = st.columns([0.5, 1.5])
@@ -297,7 +297,7 @@ with center:
             "",
             placeholder="Enter Email",
             label_visibility="collapsed",
-            key="user_info_email",
+            #key="user_info_email",
         )
 
 # Track if user has tried submitting

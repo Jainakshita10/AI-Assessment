@@ -25,30 +25,41 @@ if "accepted_terms" not in st.session_state:
 
 @st.dialog("Privacy Notice – AI Maturity Assessment")
 def show_terms_popup():
-    st.write("""
-    ### Purpose
+
+    st.markdown("""
+<div style="font-size:11px; line-height:1;">
+
+#### Purpose
 This assessment collects responses to evaluate the AI maturity of your organization and generate insights and recommendations.
-### Data Collected
+
+#### Data Collected
 We may collect:
-- Survey responses
-- Organization-related inputs (if provided)
-- Technical metadata (e.g., browser or session information)
-### How Data is Used
+- Survey responses  
+- Organization-related inputs (if provided)  
+- Technical metadata (e.g., browser or session information)  
+
+#### How Data is Used
 Your data will be used to:
-- Analyze AI maturity levels
-- Generate aggregated insights and reports
-- Improve our assessment capabilities
-### Data Storage
+- Analyze AI maturity levels  
+- Generate aggregated insights and reports  
+- Improve our assessment capabilities  
+
+#### Data Storage
 All data is securely stored using cloud infrastructure (e.g., Azure services).
-### Data Retention
+
+#### Data Retention
 Data may be retained for analysis purposes and will be securely managed.
-### Data Sharing
+
+#### Data Sharing
 Your responses will not be shared externally.
-### Your Rights
+
+#### Your Rights
 You may:
-- Withdraw consent at any time
-- Request deletion of your data
-    """)
+- Withdraw consent at any time  
+- Request deletion of your data  
+
+</div>
+""", unsafe_allow_html=True)
     if st.button("Accept",key='accept_btn'):
         st.session_state.accepted_terms = True
         st.session_state.show_popup = False
@@ -387,7 +398,7 @@ with center:
             """,
             unsafe_allow_html=True
         )
-        link_clicked = st.button("View Privacy Notice", key="terms_btn")
+        link_clicked = st.button("View Privacy Notice Before Proceeding", key="terms_btn")
         if link_clicked:
             st.session_state.show_popup = True
 
