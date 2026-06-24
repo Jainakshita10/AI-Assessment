@@ -130,6 +130,14 @@ label {
 .logo-container img {
    width: 60px;
 }
+/* Hide browser's native password reveal icon */
+   input[type="password"]::-ms-reveal,
+   input[type="password"]::-ms-clear,
+   input[type="password"]::-webkit-credentials-auto-fill-button,
+   input[type="password"]::-webkit-password-auto-fill-button {
+       display: none !important;
+       visibility: hidden !important;
+   }
 </style>
 """, unsafe_allow_html=True)
 # ------------------------

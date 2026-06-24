@@ -182,19 +182,12 @@ def insert_respondent(client_name, industry, domain, name, designation, role, em
     conn = get_connection()
     cursor = conn.cursor()
 
+    
     if is_postgres():
         cursor.execute("""
         INSERT INTO respondents_details
         (client_name, industry, domain, name, designation, role, email)
         VALUES (%s, %s, %s, %s, %s, %s, %s)
-        ON CONFLICT (email)
-        DO UPDATE SET
-            client_name = EXCLUDED.client_name,
-            industry = EXCLUDED.industry,
-            domain = EXCLUDED.domain,
-            name = EXCLUDED.name,
-            designation = EXCLUDED.designation,
-            role = EXCLUDED.role;
         """, (client_name, industry, domain, name, designation, role, email))
 
     else:

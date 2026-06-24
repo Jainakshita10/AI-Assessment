@@ -256,9 +256,7 @@ Users_Response_Scores={}
 for dim in dimensions:
     qs = questions_data[dim]
     max_score = len(qs) * 5
-
     # ⚠️ FIX: using correct key format from questionnaire
-    
     obtained = sum(
         v["value"] if isinstance(v, dict) and v.get("type") == "radio" else 0
         for (d, _), v in answers.items()
@@ -283,7 +281,7 @@ for dim in dimensions:
         if d == dim and isinstance(v, dict) and v.get("type") == "radio"
     ]
     print(Users_Response_Comments)
-    pct = (obtained / max_score) * 100 if max_score else 0
+    pct = round((obtained / max_score) * 100, 1) if max_score else 0
     category = get_category(pct)
 
     # ✅ store for DB
@@ -295,14 +293,14 @@ for dim in dimensions:
         "Pillar": dim,
         "Response Score": obtained,
         "Max Score": max_score,
-        "Score %": round(pct, 2),
+        "Score %": pct,
         "Maturity": category
     })
 
     total_score += obtained
     total_max += max_score
 
-total_pct = (total_score / total_max) * 100 if total_max else 0
+total_pct = round((total_score / total_max) * 100, 1) if total_max else 0
 # ------------------------------------------------
 # PAGE UI
 # ------------------------------------------------
@@ -431,9 +429,21 @@ table_style = """
     background: #2a2f55;
     transition: 0.2s;
 }
-[data-testid="StyledFullScreenButton"] {
-    display: none;
+
+/* Hide fullscreen button on ALL Streamlit elements */
+div[data-testid="stElementToolbar"] {
+    display: none !important;
 }
+
+/* Backup selectors (depends on Streamlit version) */
+button[title="View fullscreen"] {
+    display: none !important;
+}
+
+button[aria-label="View fullscreen"] {
+    display: none !important;
+}
+
 </style>
 """
 col1 , col2 = st.columns([2.2, 1.8])
@@ -474,7 +484,7 @@ with col1:
             <td>{r["Pillar"]}</td>
             <td>{r["Response Score"]}</td>
             <td>{r["Max Score"]}</td>
-            <td>{score_pct}%</td>
+            <td>{score_pct:.1f}%</td>
             <td class="{maturity_class}">{r["Maturity"]}</td>
             </tr>
         """
@@ -487,7 +497,7 @@ with col1:
         <td><b>Total</b></td>
         <td>{total_score}</td>
         <td>{total_max}</td>
-        <td>{round(total_pct, 2)}%</td>
+        <td>{total_pct:.1f}%</td>
         <td class="{total_class}"><b>{get_category(total_pct)}</b></td>
         </tr>
         </table>
