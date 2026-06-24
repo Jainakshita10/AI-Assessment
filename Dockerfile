@@ -63,6 +63,7 @@ COPY ./utils.py ./utils.py
 COPY ./config.py ./config.py
 COPY ./AI_App_data_sample.xlsx ./AI_App_data_sample.xlsx
 COPY ./database.py ./database.py
+COPY ./database_views.py ./database_views.py
 
 # unzip chromadb
 # RUN apt update && apt install unzip && unzip chroma_data.zip
